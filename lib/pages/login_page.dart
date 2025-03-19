@@ -3,7 +3,8 @@ import 'package:artorius/components/text_field.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  final Function()? onTap;
+  const LoginPage({super.key, required this.onTap});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -61,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     Text("Wilt thou not be a member? "),
                     GestureDetector(
-                      onTap: (){},
+                      onTap: widget.onTap,
                       child: Text("Enlist thyself.", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueGrey),)
                     )
                   ],

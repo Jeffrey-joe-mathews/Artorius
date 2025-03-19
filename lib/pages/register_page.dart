@@ -3,7 +3,8 @@ import 'package:artorius/components/text_field.dart';
 import 'package:flutter/material.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+  final Function()? onTap;
+  const RegisterPage({super.key, required this.onTap });
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
@@ -13,6 +14,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
+  final confirmPasswordTextController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,23 +33,29 @@ class _RegisterPageState extends State<RegisterPage> {
                 const SizedBox(height: 50),
             
                 // welcome back message
-                Text("Well met, Thou has sorely been missed"),
+                Text("Pray, let us craft a ledger for thee"),
             
                 const SizedBox(height: 50),
 
 
                 // email text field
-                MyTextField(controller: emailTextController, hintText: "Enter your emailID", obscureText: false),
+                MyTextField(controller: emailTextController, hintText: "Enter thy emailID", obscureText: false),
 
                 const SizedBox(height: 10,),
             
                 // password textfield
-                MyTextField(controller: passwordTextController, hintText: "Enter your password", obscureText: true),
+                MyTextField(controller: passwordTextController, hintText: "Enter thy password", obscureText: true),
+
+
+                const SizedBox(height: 10,),
+
+                MyTextField(controller: confirmPasswordTextController, hintText: "Confirm thy password", obscureText: true),
+
 
                 const SizedBox(height: 25,),
             
                 // sign-in button
-                MyButton(onTap: (){}, text: "L O G I N"),
+                MyButton(onTap: (){}, text: "S I G N - U P"),
             
                 const SizedBox(height: 25,),
 
@@ -56,10 +64,10 @@ class _RegisterPageState extends State<RegisterPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Wilt thou not be a member? "),
+                    Text("Hast thou an account? "),
                     GestureDetector(
-                      onTap: (){},
-                      child: Text("Enlist thyself.", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueGrey),)
+                      onTap: widget.onTap,
+                      child: Text("Enter here.", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueGrey),)
                     )
                   ],
                 ),
