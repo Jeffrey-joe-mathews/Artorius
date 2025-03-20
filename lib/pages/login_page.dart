@@ -1,5 +1,6 @@
 import 'package:artorius/components/button.dart';
 import 'package:artorius/components/text_field.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -16,6 +17,10 @@ class _LoginPageState extends State<LoginPage> {
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
 
+  // sign user in
+  void signIn () async {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(email: emailTextController.text, password: passwordTextController.text);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 25,),
             
                 // sign-in button
-                MyButton(onTap: (){}, text: "L O G I N"),
+                MyButton(onTap: signIn, text: "L O G I N"),
             
                 const SizedBox(height: 25,),
 
