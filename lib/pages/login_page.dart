@@ -36,6 +36,7 @@ class _LoginPageState extends State<LoginPage> {
 
   void displayMessage (String alertMessage) {
     showDialog(context: context, builder: (context) => AlertDialog(
+      icon: Icon(Icons.error),
       title: Text(alertMessage, style: TextStyle(color: Colors.red),),
     ));
   }
