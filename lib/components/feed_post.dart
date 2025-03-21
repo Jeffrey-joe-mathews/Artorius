@@ -63,7 +63,11 @@ class _FeedPostState extends State<FeedPost> {
         children: [
           Column(
             children: [
-              LikeButton(isLiked: isLiked, onTap: toggleLike)
+              LikeButton(isLiked: isLiked, onTap: toggleLike),
+
+              const SizedBox(height: 6,),
+
+              Text(widget.likes.length.toString(), style: TextStyle(color: Colors.grey),),
             ],
           ),
           // Container(
