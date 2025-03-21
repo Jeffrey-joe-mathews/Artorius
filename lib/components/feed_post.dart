@@ -17,6 +17,12 @@ class FeedPost extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 25, vertical: 25),
       child: Row(
         children: [
+          Container(
+            decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.grey[500]),
+            child: const Icon(Icons.person, color: Colors.white,),
+            padding: EdgeInsets.all(10),
+          ),
+          const SizedBox(width: 20,),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
