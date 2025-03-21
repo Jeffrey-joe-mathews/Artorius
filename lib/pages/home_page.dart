@@ -23,8 +23,17 @@ class _HomePageState extends State<HomePage> {
     FirebaseAuth.instance.signOut();
   }
 
-  void postMessage (String mediaMsg) {
-
+  void postMessage () {
+    // only post if there exists something in the text field
+    if (textController.text.isNotEmpty) {
+      // store in firebase
+      FirebaseFirestore.instance.collection("User Post's").add({
+        'UserEmail' : currentUser.email,
+        'Message' : textController.text,
+        'TimeStamp' : Timestamp.now(),
+      });
+    }
+    textController.clear();
   }
 
   @override
@@ -46,10 +55,10 @@ class _HomePageState extends State<HomePage> {
           // feed
           Expanded(
             child: StreamBuilder(
-              stream: FirebaseFirestore.instance.collection("User Post's").orderBy("Timestamp", descending: false).snapshots(), 
+              stream: FirebaseFirestore.instance.collection("User Post's").orderBy("TimeStamp", descending: false).snapshots(), 
               builder:(context, snapshot) {
                 if (snapshot.hasData) {
-                  return ListView.builder(itemBuilder:(context, index) {
+                  return ListView.builder(itemCount: snapshot.data!.docs.length, itemBuilder:(context, index) {
                     // get the message
                     final post  = snapshot.data!.docs[index];
                     return FeedPost(message: post["Message"], user: post['UserEmail'], time: "12 am");

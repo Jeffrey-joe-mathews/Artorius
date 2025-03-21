@@ -8,16 +8,26 @@ class FeedPost extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Column(
-          children: [
-            Text(user),
-            Text(message),
-          ],
-        ),
-
-      ],
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12)
+      ),
+      margin: EdgeInsets.symmetric(horizontal: 26, vertical: 12.5),
+      padding: EdgeInsets.symmetric(horizontal: 25, vertical: 25),
+      child: Row(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(user, style: TextStyle(color: Colors.grey.shade400),),
+              const SizedBox(height: 8,),
+              Text(message),
+            ],
+          ),
+      
+        ],
+      ),
     );
   }
 }
