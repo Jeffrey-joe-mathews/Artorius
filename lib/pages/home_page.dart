@@ -1,5 +1,7 @@
+import 'package:artorius/components/drawer.dart';
 import 'package:artorius/components/feed_post.dart';
 import 'package:artorius/components/text_field.dart';
+import 'package:artorius/pages/profile_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -37,11 +39,27 @@ class _HomePageState extends State<HomePage> {
     textController.clear();
   }
 
+  // navigate to profile page
+  void goToProfilePage () {
+    // pop menu drawer
+    Navigator.pop(context);
+
+    // goto profile page
+    Navigator.push(context, MaterialPageRoute(builder:(context) => ProfilePage(),));
+  }
+
+  void onLogoutTap () {
+    Navigator.pop(context);
+    FirebaseAuth.instance.signOut();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade300,
+      
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
         elevation: 0,
         backgroundColor: Colors.grey.shade900,
         title: Text("A R T O R I U S", style: TextStyle(color: Colors.white),),
@@ -50,6 +68,7 @@ class _HomePageState extends State<HomePage> {
           IconButton(onPressed: signOut, icon: Icon(Icons.logout),color: Colors.white,)
         ],
       ),
+      drawer: MyDrawer(onLogoutTap: onLogoutTap, onProfileTap: goToProfilePage),
       body: Center(
         child: Column(
           children: [
