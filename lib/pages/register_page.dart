@@ -1,5 +1,6 @@
 import 'package:artorius/components/button.dart';
 import 'package:artorius/components/text_field.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -15,6 +16,41 @@ class _RegisterPageState extends State<RegisterPage> {
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
   final confirmPasswordTextController = TextEditingController();
+
+  // sign the user up ykwim
+  void signUp () async {
+    // show circly thung
+    showDialog(context: context, builder:(context) => const Center(child: CircularProgressIndicator.adaptive(),),);
+
+    // making sure the passwords match
+    try {
+      if(passwordTextController.text == confirmPasswordTextController.text) {
+
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailTextController.text, password: passwordTextController.text);
+      }
+      else {
+        Navigator.pop(context);
+        // show error message to the user
+        displayMessage("Passwords Don't Match");
+        return;
+      }
+      if(context.mounted) Navigator.pop(context);
+    } on FirebaseAuthException catch(e) {
+        // pop loading circle
+        Navigator.pop(context);
+        // show error to user
+        displayMessage(e.code);
+    }
+
+  }
+
+  void displayMessage (String alertMessage) {
+    showDialog(context: context, builder:(context) => AlertDialog(
+      icon: Icon(Icons.error, color: Colors.red,),
+      title: Text(alertMessage,style: TextStyle(color: Colors.red),),
+    ),);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,7 +91,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 const SizedBox(height: 25,),
             
                 // sign-in button
-                MyButton(onTap: (){}, text: "S I G N - U P"),
+                MyButton(onTap: signUp, text: "S I G N - U P"),
             
                 const SizedBox(height: 25,),
 
