@@ -31,6 +31,7 @@ class _HomePageState extends State<HomePage> {
         'UserEmail' : currentUser.email,
         'Message' : textController.text,
         'TimeStamp' : Timestamp.now(),
+        'Likes' : [],
       });
     }
     textController.clear();
@@ -61,7 +62,7 @@ class _HomePageState extends State<HomePage> {
                   return ListView.builder(itemCount: snapshot.data!.docs.length, itemBuilder:(context, index) {
                     // get the message
                     final post  = snapshot.data!.docs[index];
-                    return FeedPost(message: post["Message"], user: post['UserEmail'], time: "12 am");
+                    return FeedPost(message: post["Message"], user: post['UserEmail'], time: "12 am", likes: List<String>.from(post['Likes'] ?? []), postID: post.id,);
                   },);
                 }
                 else if (snapshot.hasError) {
