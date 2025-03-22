@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:artorius/components/comment_button.dart';
 import 'package:artorius/components/comments.dart';
+import 'package:artorius/components/delete_button.dart';
 import 'package:artorius/components/like_button.dart';
 import 'package:artorius/helper/helper_method.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -86,6 +87,29 @@ class _FeedPostState extends State<FeedPost> {
     ),);
   }
 
+  void deletePost () {
+    // show a dialog box asking for confirmation before deleting the post
+    showDialog(context: context, builder:(context) => AlertDialog(
+      title: const Text("Delete this Post?"),
+      content: const Text("This post will be permanently deleted..."),
+      actions: [
+        TextButton(onPressed:() {
+          Navigator.pop(context);   
+        }, child: Text("Cancel",style: TextStyle(color: Colors.green),)),
+        TextButton(onPressed:() async {
+          Navigator.pop(context); 
+          // delete comments first
+          final commentDocs = await FirebaseFirestore.instance.collection("User Post's").doc(widget.postID).collection("Comments").get();
+          for (var doc in commentDocs.docs) {
+            await FirebaseFirestore.instance.collection("User Post's").doc(widget.postID).collection("Comments").doc(doc.id).delete();
+          }
+          // delete the post
+          await FirebaseFirestore.instance.collection("User Post's").doc(widget.postID).delete().then((value) => print("Post Deleted")).catchError((error) => print(error.toString()));
+          } , child: Text("Delete", style: TextStyle(color: Colors.red),))
+      ],
+    ),);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -102,19 +126,27 @@ class _FeedPostState extends State<FeedPost> {
         children: [
           const SizedBox(width: 20,),
           //  feed post
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(widget.message),
-              const SizedBox(height: 8,),
-              Row(
+              // group of text
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(widget.user, style: TextStyle(fontSize: 12, ),),
-                  Text(" .  "),
-                  Text(widget.time, style: TextStyle(fontSize: 12, ),),
+                  Text(widget.message),
+                  const SizedBox(height: 8,),
+                  Row(
+                    children: [
+                      Text(widget.user, style: TextStyle(fontSize: 12, ),),
+                      Text(" .  "),
+                      Text(widget.time, style: TextStyle(fontSize: 12, ),),
+                    ],
+                  ),
                 ],
               ),
-            ],
+              // delete button
+              if (widget.user == currentUser!.email) DeleteButton(onTap: deletePost),
+            ], 
           ),
 
           const SizedBox(height: 5,),
