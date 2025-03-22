@@ -51,11 +51,9 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade300,
+      backgroundColor:Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: Colors.grey.shade900,
-        iconTheme: IconThemeData(color: Colors.white),
-        title: Text("P R O F I L E", style:TextStyle(color: Colors.white),),
+        title: Text("P R O F I L E", ),
       ),
       body: StreamBuilder<DocumentSnapshot>(
         stream:FirebaseFirestore.instance.collection("Users").doc(currentUser!.email).snapshots(), 
@@ -96,32 +94,7 @@ class _ProfilePageState extends State<ProfilePage> {
           return const Center(child: CircularProgressIndicator(),);
         },
       ),
-      // body: ListView(
-      //   children: [
-      //     // profile picture
-      //     const SizedBox(height: 50,),
-      //     Icon(Icons.person, size: 84,),
 
-      //     const SizedBox(height: 10,),
-
-      //     // user email
-      //     Text(currentUser!.email!, textAlign: TextAlign.center,style: TextStyle(color: Colors.grey.shade700),),
-
-      //     const SizedBox(height: 50,),
-      //     //// userdetails
-      //     Padding(padding: const EdgeInsets.symmetric(vertical: 20),child: Text("B I O", textAlign: TextAlign.center, style: TextStyle(color: Colors.grey.shade700),),),
-          
-      //       MyTextBox(text: "Jeffrey Joe Mathews", sectionName: "username", onPressed:() => editField("username"),),
-      //       MyTextBox(text: "Empty Bio", sectionName: "biography", onPressed:() => editField("bio"),),
-      //       MyTextBox(text: "Archery", sectionName: "Interests", onPressed: () => editField("interests"))
-      //       // user posts
-          
-      //     const SizedBox(height: 50,),
-
-      //     Padding(padding: const EdgeInsets.symmetric(vertical: 20),child: Text("P O S T S", textAlign: TextAlign.center, style: TextStyle(color: Colors.grey.shade700),),),
-
-      //   ],
-      // ),
     );
   }
 }

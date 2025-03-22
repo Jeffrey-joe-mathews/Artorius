@@ -91,10 +91,11 @@ class _FeedPostState extends State<FeedPost> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.grey.shade100,
+        color: Theme.of(context).colorScheme.primary,
         borderRadius: BorderRadius.circular(12)
       ),
-      margin: EdgeInsets.symmetric(horizontal: 26, vertical: 12.5),
+      // margin: EdgeInsets.symmetric(horizontal: 26, vertical: 12.5),
+      margin: EdgeInsets.only(left: 26, right: 26, top: 20),
       padding: EdgeInsets.symmetric(horizontal: 25, vertical: 25),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,9 +109,9 @@ class _FeedPostState extends State<FeedPost> {
               const SizedBox(height: 8,),
               Row(
                 children: [
-                  Text(widget.user, style: TextStyle(fontSize: 12, color: Colors.black45),),
+                  Text(widget.user, style: TextStyle(fontSize: 12, ),),
                   Text(" .  "),
-                  Text(widget.time, style: TextStyle(fontSize: 12, color: Colors.black45),),
+                  Text(widget.time, style: TextStyle(fontSize: 12, ),),
                 ],
               ),
             ],

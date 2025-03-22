@@ -10,7 +10,7 @@ class Comments extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(8)),
+      decoration: BoxDecoration(color: Theme.of(context).colorScheme.secondary, borderRadius: BorderRadius.circular(8)),
       margin: const EdgeInsets.only(bottom: 6),
       padding: const EdgeInsets.all(10),
       child: Column(
@@ -22,9 +22,9 @@ class Comments extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(user, style: TextStyle(fontSize: 12, color: Colors.black45),),
+              Text(user, style: TextStyle(fontSize: 12,),),
               Text("  "),
-              Text(time, style: TextStyle(fontSize: 12, color: Colors.black45),),
+              Text(time, style: TextStyle(fontSize: 12,),),
             ],
           ),
         ],

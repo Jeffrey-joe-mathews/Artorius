@@ -9,7 +9,7 @@ class MyTextBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(color: Colors.grey.shade200, borderRadius: BorderRadius.circular(8)),
+      decoration: BoxDecoration(color: Theme.of(context).colorScheme.primary , borderRadius: BorderRadius.circular(8)),
       padding: EdgeInsets.only(left: 15, bottom: 15, right: 15),
       margin: const EdgeInsets.only(left: 20, right: 20, top: 20),
       child: Column(

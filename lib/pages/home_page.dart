@@ -51,16 +51,14 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade300,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       
       appBar: AppBar(
         // leading: IconButton(onPressed:() => Scaffold.of(context).openDrawer(), icon: Icon(Icons.menu)),
-        iconTheme: IconThemeData(color: Colors.white),
         elevation: 0,
-        backgroundColor: Colors.grey.shade900,
         title: Center(child: Padding(
           padding: const EdgeInsets.only(right: 50),
-          child: Text("A R T O R I U S", style: TextStyle(color: Colors.white,),textAlign: TextAlign.center,),
+          child: Text("A R T O R I U S", ),
         )),
         // actions: [
         //   // sign Out Button
@@ -105,7 +103,7 @@ class _HomePageState extends State<HomePage> {
         
           // user message
           Padding(
-            padding: const EdgeInsets.all(25.0),
+            padding: const EdgeInsets.all(15.0),
             child: Row(
               children: [
                 // text field
@@ -116,8 +114,7 @@ class _HomePageState extends State<HomePage> {
           ),
         
           // logged in as?
-          Text("Logged in as : ${currentUser.email!}", style: TextStyle(color: Colors.grey),),
-          const SizedBox(height: 25,),
+          // const SizedBox(height: 15,),
         
           ],
         
