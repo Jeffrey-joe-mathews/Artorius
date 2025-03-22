@@ -91,7 +91,7 @@ class _FeedPostState extends State<FeedPost> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Colors.grey.shade100,
         borderRadius: BorderRadius.circular(12)
       ),
       margin: EdgeInsets.symmetric(horizontal: 26, vertical: 12.5),
