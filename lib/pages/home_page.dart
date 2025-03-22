@@ -43,14 +43,8 @@ class _HomePageState extends State<HomePage> {
   void goToProfilePage () {
     // pop menu drawer
     Navigator.pop(context);
+    Future.delayed(Duration(milliseconds: 300),  () {Navigator.push(context, MaterialPageRoute(builder:(context) => ProfilePage(),));});
 
-    // goto profile page
-    Navigator.push(context, MaterialPageRoute(builder:(context) => ProfilePage(),));
-  }
-
-  void onLogoutTap () {
-    Navigator.pop(context);
-    FirebaseAuth.instance.signOut();
   }
 
   @override
@@ -68,7 +62,16 @@ class _HomePageState extends State<HomePage> {
           IconButton(onPressed: signOut, icon: Icon(Icons.logout),color: Colors.white,)
         ],
       ),
-      drawer: MyDrawer(onLogoutTap: onLogoutTap, onProfileTap: goToProfilePage),
+      // drawer: MyDrawer(onLogoutTap: signOut, onProfileTap: goToProfilePage),
+      // drawer: Drawer(
+      //   child: ListView(
+      //     children: [
+      //       ListTile(title: Text("H O M E", style: TextStyle(color: Colors.white),),),
+      //       ListTile(title: Text("P R O F I L E", style: TextStyle(color: Colors.white),),)
+      //     ],
+      //   ),
+      // ),
+      drawer: MyDrawer(),
       body: Center(
         child: Column(
           children: [

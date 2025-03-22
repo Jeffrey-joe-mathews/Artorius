@@ -31,7 +31,6 @@ class _LoginPageState extends State<LoginPage> {
       // print(e.code);
       displayMessage(e.code);
     }
-    Navigator.pop(context);
   }
 
   void displayMessage (String alertMessage) {
