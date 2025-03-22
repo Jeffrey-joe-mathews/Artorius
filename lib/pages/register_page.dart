@@ -1,5 +1,6 @@
 import 'package:artorius/components/button.dart';
 import 'package:artorius/components/text_field.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -17,31 +18,25 @@ class _RegisterPageState extends State<RegisterPage> {
   final passwordTextController = TextEditingController();
   final confirmPasswordTextController = TextEditingController();
 
-  // sign the user up ykwim
+  // sign the user up ykwim`
   void signUp () async {
-    // show circly thung
-    showDialog(context: context, builder:(context) => const Center(child: CircularProgressIndicator.adaptive(),),);
+    showDialog(context: context, builder: (context) => const Center(child: CircularProgressIndicator.adaptive(),));
 
-    // making sure the passwords match
-    try {
-      if(passwordTextController.text == confirmPasswordTextController.text) {
-
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailTextController.text, password: passwordTextController.text);
-      }
-      else {
-        Navigator.pop(context);
-        // show error message to the user
-        displayMessage("Passwords Don't Match");
-        return;
-      }
-      if(context.mounted) Navigator.pop(context);
-    } on FirebaseAuthException catch(e) {
-        // pop loading circle
-        Navigator.pop(context);
-        // show error to user
-        displayMessage(e.code);
+    if(passwordTextController.text != confirmPasswordTextController.text) {
+      Navigator.pop(context);displayMessage("Passwords Don't Match");return;
     }
-
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailTextController.text, password: passwordTextController.text);
+      // after creating user, create a new document in cloud firesotre called users
+      if (userCredential.user != null ) await FirebaseFirestore.instance.collection("Users").doc(userCredential.user!.email).set({'username' : emailTextController.text.split("@")[0], 'bio' : 'empty bio...', 'interests' : 'empty interests...'});
+      // if (context.mounted) Navigator.pop(context);
+    }
+    on FirebaseAuthException catch (e) {
+      // pop loading circle
+      // show error to user
+      displayMessage(e.code);
+    }
+      Navigator.pop(context);
   }
 
   void displayMessage (String alertMessage) {
