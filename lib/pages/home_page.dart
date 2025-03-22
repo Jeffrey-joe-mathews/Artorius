@@ -53,14 +53,16 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.grey.shade300,
       
       appBar: AppBar(
+        // leading: IconButton(onPressed:() => Scaffold.of(context).openDrawer(), icon: Icon(Icons.menu)),
         iconTheme: IconThemeData(color: Colors.white),
         elevation: 0,
         backgroundColor: Colors.grey.shade900,
         title: Text("A R T O R I U S", style: TextStyle(color: Colors.white),),
-        actions: [
-          // sign Out Button
-          IconButton(onPressed: signOut, icon: Icon(Icons.logout),color: Colors.white,)
-        ],
+        // actions: [
+        //   // sign Out Button
+        //   IconButton(onPressed: signOut, icon: Icon(Icons.logout),color: Colors.white,)
+        // ],
+
       ),
       // drawer: MyDrawer(onLogoutTap: signOut, onProfileTap: goToProfilePage),
       // drawer: Drawer(
@@ -71,7 +73,7 @@ class _HomePageState extends State<HomePage> {
       //     ],
       //   ),
       // ),
-      drawer: MyDrawer(),
+      drawer: MyDrawer(profile: goToProfilePage, signOut: signOut),
       body: Center(
         child: Column(
           children: [
