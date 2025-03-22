@@ -4,8 +4,12 @@ import 'package:artorius/components/text_field.dart';
 import 'package:artorius/helper/helper_method.dart';
 import 'package:artorius/pages/profile_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloudinary/cloudinary.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,23 +26,53 @@ class _HomePageState extends State<HomePage> {
   // text controller
   final textController = TextEditingController();
 
+  // image from system
+  XFile? _image;
+
   void signOut () {
     FirebaseAuth.instance.signOut();
   }
 
-  void postMessage () {
-    // only post if there exists something in the text field
-    if (textController.text.isNotEmpty) {
-      // store in firebase
-      FirebaseFirestore.instance.collection("User Post's").add({
-        'UserEmail' : currentUser.email,
-        'Message' : textController.text,
-        'TimeStamp' : Timestamp.now(),
-        'Likes' : [],
+void postMessage() async {
+  if (textController.text.isNotEmpty || _image != null) {
+    // If there's a message or an image
+    String? imageUrl;
+
+    try {
+      if (_image != null) {
+        // Upload image to Cloudinary and get the image URL
+        imageUrl = await uploadImageToCloudinary(File(_image!.path));
+
+        // Store the message and image URL in Firestore
+        await FirebaseFirestore.instance.collection("User Post's").add({
+          'UserEmail': FirebaseAuth.instance.currentUser!.email,
+          'Message': textController.text,
+          'TimeStamp': Timestamp.now(),
+          'Likes': [],
+          'ImageUrl': imageUrl ?? "", // Save the image URL if exists
+        });
+      } else {
+        // No image, just store the message
+        await FirebaseFirestore.instance.collection("User Post's").add({
+          'UserEmail': FirebaseAuth.instance.currentUser!.email,
+          'Message': textController.text,
+          'TimeStamp': Timestamp.now(),
+          'Likes': [],
+          'ImageUrl': "", // No image, store an empty string
+        });
+      }
+      
+      // Clear the text and reset image after posting
+      textController.clear();
+      setState(() {
+        _image = null; // Reset the selected image after posting
       });
+    } catch (e) {
+      print('Error: $e');
     }
-    textController.clear();
   }
+}
+
 
   // navigate to profile page
   void goToProfilePage () {
@@ -46,6 +80,37 @@ class _HomePageState extends State<HomePage> {
     Navigator.pop(context);
     Future.delayed(Duration(milliseconds: 300),  () {Navigator.push(context, MaterialPageRoute(builder:(context) => ProfilePage(),));});
 
+  }
+
+  // get the image from camera or local storage
+  Future<void> pickImage () async {
+    final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
+    setState(() {
+      _image = pickedImage;
+    }); 
+  }
+
+   Future<String> uploadImageToCloudinary(File imageFile) async {
+    // Use the Cloudinary package to upload the image and get the URL
+    final cloudName = dotenv.env['CLOUDINARY_CLOUD_NAME']!;
+    final apiKey = dotenv.env['CLOUDINARY_API_KEY']!;
+    final apiSecret = dotenv.env['CLOUDINARY_API_SECRET']!;
+    final cloudinary = Cloudinary.signedConfig(
+      cloudName: cloudName,
+      apiKey: apiKey,
+      apiSecret: apiSecret,
+    );
+
+    final response = await cloudinary.upload(
+      file : imageFile.path,
+      resourceType: CloudinaryResourceType.image,
+    );
+
+    if (response.isSuccessful) {
+      return response.secureUrl!;
+    } else {
+      throw Exception('Image upload failed');
+    }
   }
 
   @override
@@ -88,7 +153,7 @@ class _HomePageState extends State<HomePage> {
                   return ListView.builder(itemCount: snapshot.data!.docs.length, itemBuilder:(context, index) {
                     // get the message
                     final post  = snapshot.data!.docs[index];
-                    return FeedPost(message: post["Message"], user: post['UserEmail'], time: formatDate2(post['TimeStamp']), likes: List<String>.from(post['Likes'] ?? []), postID: post.id,);
+                    return FeedPost(message: post["Message"], user: post['UserEmail'], time: formatDate2(post['TimeStamp']), likes: List<String>.from(post['Likes'] ?? []), postID: post.id, imageUrl: post['ImageUrl']??"");
                   },);
                 }
                 else if (snapshot.hasError) {
@@ -108,6 +173,7 @@ class _HomePageState extends State<HomePage> {
               children: [
                 // text field
                 Expanded(child: MyTextField(controller: textController, hintText: "Post A Message", obscureText: false)),
+                IconButton(onPressed: pickImage ,icon: Icon(Icons.attachment)),
                 IconButton(onPressed: postMessage, icon: Icon(Icons.send)),
               ],
             ),
