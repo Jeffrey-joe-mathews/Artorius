@@ -1,4 +1,5 @@
 import 'package:artorius/components/text_box.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -27,7 +28,13 @@ class _ProfilePageState extends State<ProfilePage> {
         iconTheme: IconThemeData(color: Colors.white),
         title: Text("P R O F I L E", style:TextStyle(color: Colors.white),),
       ),
-      body: ListView(
+      body: StreamBuilder<DocumentSnapshot>(
+        stream:FirebaseFirestore.instance.collection("Users").doc(currentUser!.email).snapshots(), 
+        builder:(context, snapshot) {
+          // get user data
+          if (snapshot.hasData) {
+            final userData = snapshot.data!.data() as Map<String, dynamic>;
+            return ListView(
         children: [
           // profile picture
           const SizedBox(height: 50,),
@@ -42,11 +49,9 @@ class _ProfilePageState extends State<ProfilePage> {
           //// userdetails
           Padding(padding: const EdgeInsets.symmetric(vertical: 20),child: Text("B I O", textAlign: TextAlign.center, style: TextStyle(color: Colors.grey.shade700),),),
           
-            // username
             MyTextBox(text: "Jeffrey Joe Mathews", sectionName: "username", onPressed:() => editField("username"),),
-            // bio
-
             MyTextBox(text: "Empty Bio", sectionName: "biography", onPressed:() => editField("bio"),),
+            MyTextBox(text: "Archery", sectionName: "Interests", onPressed: () => editField("interests")),
             // user posts
           
           const SizedBox(height: 50,),
@@ -54,7 +59,40 @@ class _ProfilePageState extends State<ProfilePage> {
           Padding(padding: const EdgeInsets.symmetric(vertical: 20),child: Text("P O S T S", textAlign: TextAlign.center, style: TextStyle(color: Colors.grey.shade700),),),
 
         ],
+        );
+          }
+          else if (snapshot.hasError) {
+            return Center(child: Text('Error${snapshot.error}'),);
+          }
+          return const Center(child: CircularProgressIndicator(),);
+        },
       ),
+      // body: ListView(
+      //   children: [
+      //     // profile picture
+      //     const SizedBox(height: 50,),
+      //     Icon(Icons.person, size: 84,),
+
+      //     const SizedBox(height: 10,),
+
+      //     // user email
+      //     Text(currentUser!.email!, textAlign: TextAlign.center,style: TextStyle(color: Colors.grey.shade700),),
+
+      //     const SizedBox(height: 50,),
+      //     //// userdetails
+      //     Padding(padding: const EdgeInsets.symmetric(vertical: 20),child: Text("B I O", textAlign: TextAlign.center, style: TextStyle(color: Colors.grey.shade700),),),
+          
+      //       MyTextBox(text: "Jeffrey Joe Mathews", sectionName: "username", onPressed:() => editField("username"),),
+      //       MyTextBox(text: "Empty Bio", sectionName: "biography", onPressed:() => editField("bio"),),
+      //       MyTextBox(text: "Archery", sectionName: "Interests", onPressed: () => editField("interests"))
+      //       // user posts
+          
+      //     const SizedBox(height: 50,),
+
+      //     Padding(padding: const EdgeInsets.symmetric(vertical: 20),child: Text("P O S T S", textAlign: TextAlign.center, style: TextStyle(color: Colors.grey.shade700),),),
+
+      //   ],
+      // ),
     );
   }
 }
