@@ -1,6 +1,7 @@
 import 'package:artorius/components/drawer.dart';
 import 'package:artorius/components/feed_post.dart';
 import 'package:artorius/components/text_field.dart';
+import 'package:artorius/helper/helper_method.dart';
 import 'package:artorius/pages/profile_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -89,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                   return ListView.builder(itemCount: snapshot.data!.docs.length, itemBuilder:(context, index) {
                     // get the message
                     final post  = snapshot.data!.docs[index];
-                    return FeedPost(message: post["Message"], user: post['UserEmail'], time: "12 am", likes: List<String>.from(post['Likes'] ?? []), postID: post.id,);
+                    return FeedPost(message: post["Message"], user: post['UserEmail'], time: formatDate2(post['TimeStamp']), likes: List<String>.from(post['Likes'] ?? []), postID: post.id,);
                   },);
                 }
                 else if (snapshot.hasError) {

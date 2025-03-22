@@ -25,3 +25,13 @@ String formatDate(Timestamp timestamp) {
     return "$years year${years > 1 ? 's' : ''} ago";
   }
 }
+
+String formatDate2(Timestamp timestamp) {
+  DateTime dateTime = timestamp.toDate();
+
+  String day = dateTime.day.toString().padLeft(2, '0'); 
+  String month = dateTime.month.toString().padLeft(2, '0');  
+  String year = dateTime.year.toString();
+
+  return "$day/$month/$year";
+}

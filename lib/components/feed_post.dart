@@ -106,14 +106,20 @@ class _FeedPostState extends State<FeedPost> {
             children: [
               Text(widget.message),
               const SizedBox(height: 8,),
-              Text(widget.user, style: TextStyle(color: Colors.grey.shade400),),
+              Row(
+                children: [
+                  Text(widget.user, style: TextStyle(fontSize: 12, color: Colors.black45),),
+                  Text(" .  "),
+                  Text(widget.time, style: TextStyle(fontSize: 12, color: Colors.black45),),
+                ],
+              ),
             ],
           ),
 
           const SizedBox(height: 5,),
 
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [ 
               // llikes
               Column(
@@ -139,6 +145,7 @@ class _FeedPostState extends State<FeedPost> {
 
             ],
           ),
+          const SizedBox(height: 15,),
           // comments under the post
           StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance.collection("User Post's").doc(widget.postID).collection("Comments").orderBy("CommentTime", descending: true).snapshots(), 
