@@ -13,9 +13,11 @@ class MyDrawer extends StatelessWidget {
       backgroundColor: Colors.grey.shade900,
       child: 
           Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // logo
+              Column(
+                children: [
+                  // logo
               DrawerHeader(child: Icon(Icons.theater_comedy_outlined, color: Colors.white,size: 80,),),
 
               // homepage button
@@ -24,9 +26,14 @@ class MyDrawer extends StatelessWidget {
 
               // profile page button
               MyListItem(navItem: "P R O F I L E", icon: Icons.person, onTap: profile,),
-
+                ],
+              ),           
               // logout
-              MyListItem(navItem: "L O G O U T", icon: Icons.logout, onTap : signOut)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: MyListItem(navItem: "L O G O U T", icon: Icons.logout, onTap : signOut, ),
+              )
+              
             ],
           )
     );
