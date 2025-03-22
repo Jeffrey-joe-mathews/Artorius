@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:artorius/components/text_box.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,9 +16,36 @@ class _ProfilePageState extends State<ProfilePage> {
 
   // get the user email
   final currentUser = FirebaseAuth.instance.currentUser;
+  // all users
+  final usersCollection = FirebaseFirestore.instance.collection("Users");
 
-  void editField (String field) async {
+  Future<void> editField (String field) async {
+    String newValue = "";
+    await showDialog(context: context, builder:(context) => AlertDialog(
+      backgroundColor: Colors.grey.shade900,
+      title: Text("Edit Your $field", style: const TextStyle(color: Colors.white),),
+      content: TextField(
+        autofocus: true,
+        style: TextStyle(color: Colors.white),
+        decoration: InputDecoration(
+          hintText: "Enter your $field",
+          hintStyle: TextStyle(color: Colors.grey),
+        ),
+        onChanged: (value) {
+          newValue = value;
+        },
+      ),
+      actions: [
+        // cancel button
+        TextButton(onPressed: () => Navigator.pop(context), child: Text("Cancel", style: TextStyle(color: Colors.red),)),
+        // save button
+        TextButton(onPressed: () => Navigator.of(context).pop(newValue), child: Text("Update", style: TextStyle(color: Colors.green),))
+      ],
+    ),);
 
+    if (newValue.trim().length > 0) {
+      await usersCollection.doc(currentUser!.email).update({field : newValue});
+    }
   }
 
   @override
@@ -49,9 +78,9 @@ class _ProfilePageState extends State<ProfilePage> {
           //// userdetails
           Padding(padding: const EdgeInsets.symmetric(vertical: 20),child: Text("B I O", textAlign: TextAlign.center, style: TextStyle(color: Colors.grey.shade700),),),
           
-            MyTextBox(text: "Jeffrey Joe Mathews", sectionName: "username", onPressed:() => editField("username"),),
-            MyTextBox(text: "Empty Bio", sectionName: "biography", onPressed:() => editField("bio"),),
-            MyTextBox(text: "Archery", sectionName: "Interests", onPressed: () => editField("interests")),
+            MyTextBox(text: userData['username'], sectionName: "username", onPressed:() => editField("username"),),
+            MyTextBox(text: userData['bio'], sectionName: "biography", onPressed:() => editField("bio"),),
+            MyTextBox(text: userData['interests'], sectionName: "Interests", onPressed: () => editField("interests")),
             // user posts
           
           const SizedBox(height: 50,),
