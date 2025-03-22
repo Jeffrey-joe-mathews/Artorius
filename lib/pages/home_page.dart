@@ -57,7 +57,10 @@ class _HomePageState extends State<HomePage> {
         iconTheme: IconThemeData(color: Colors.white),
         elevation: 0,
         backgroundColor: Colors.grey.shade900,
-        title: Text("A R T O R I U S", style: TextStyle(color: Colors.white),),
+        title: Center(child: Padding(
+          padding: const EdgeInsets.only(right: 50),
+          child: Text("A R T O R I U S", style: TextStyle(color: Colors.white,),textAlign: TextAlign.center,),
+        )),
         // actions: [
         //   // sign Out Button
         //   IconButton(onPressed: signOut, icon: Icon(Icons.logout),color: Colors.white,)
