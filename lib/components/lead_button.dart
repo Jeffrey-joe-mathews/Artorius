@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class DeleteButton extends StatelessWidget {
+class LeadButton extends StatelessWidget {
   final void Function()? onTap;
-  const DeleteButton({super.key, required this.onTap});
+  const LeadButton({super.key, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: const Icon(Icons.cancel,),
+      child: Icon(Icons.event_available_rounded),
     );
   }
 }

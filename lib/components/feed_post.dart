@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:artorius/components/comment_button.dart';
 import 'package:artorius/components/comments.dart';
 import 'package:artorius/components/delete_button.dart';
+import 'package:artorius/components/lead_button.dart';
 import 'package:artorius/components/like_button.dart';
 import 'package:artorius/helper/helper_method.dart';
+import 'package:artorius/pages/lead_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +22,18 @@ class FeedPost extends StatefulWidget {
   final double? latitude;
   final double? longitude;
   final String? address;
-  const FeedPost({super.key, required this.message, required this.user, required this.time, required this.likes, required this.postID, required this.imageUrl, required this.latitude, required this.longitude, required this.address});
+  const FeedPost({
+    super.key, 
+    required this.message, 
+    required this.user, 
+    required this.time, 
+    required this.likes, 
+    required this.postID, 
+    required this.imageUrl, 
+    required this.latitude, 
+    required this.longitude, 
+    required this.address
+  });
 
   @override
   State<FeedPost> createState() => _FeedPostState();
@@ -148,15 +161,38 @@ class _FeedPostState extends State<FeedPost> {
                   Row(
                     children: [
                       Text(widget.user, style: TextStyle(fontSize: 12, ),),
-                      Text(" .  "),
+                      Text(" . "),
                       Text(widget.time, style: TextStyle(fontSize: 12, ),),
                     ],
                   ),
                 ],
               ),
               // Delete button, only for the post owner
-              if (widget.user == currentUser!.email) DeleteButton(onTap: deletePost) 
-              // else LeadButton(onTap: leadPost),
+              // if (widget.user == currentUser!.email) DeleteButton(onTap: deletePost) 
+              // else LeadButton(onTap:() => leadPost(),),
+              (widget.user == currentUser!.email) 
+              ? 
+              DeleteButton(onTap: deletePost) 
+              : 
+              GestureDetector(
+                child: Icon(Icons.ac_unit_sharp),
+                onTap:() => Navigator.push(
+                  context, 
+                  MaterialPageRoute(
+                    builder:(
+                      context) => LeadPage(
+                        message: widget.message,
+                        user: widget.user,
+                        time: widget.time,
+                        postID: widget.postID,
+                        likes: widget.likes,
+                        latitude: widget.latitude,
+                        longitude: widget.longitude,
+                        address: widget.address,
+                        imageUrl: widget.imageUrl,
+                        isLiked: isLiked,
+                      ),)),
+              ),
             ], 
           ),
           
@@ -173,7 +209,9 @@ class _FeedPostState extends State<FeedPost> {
               child: Row(
                 children: [
                   Icon(Icons.pin_drop),
-                  Text("Address : ${"${widget.address!.substring(0, 17)}..."??"Address not Provided"}",
+                  Text(
+                    // "Address : ${"${widget.address!.substring(0, 17)}..."??"Address not Provided"}",
+                    "Address : ${widget.address!.length > 15 ? widget.address!.substring(0, 15) : widget.address ?? "Address not Provided"}",
                     style: TextStyle(color: Colors.blue),
                   ),
                   
