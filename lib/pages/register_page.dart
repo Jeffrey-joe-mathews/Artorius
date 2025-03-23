@@ -18,11 +18,20 @@ class _RegisterPageState extends State<RegisterPage> {
   final passwordTextController = TextEditingController();
   final confirmPasswordTextController = TextEditingController();
 
+  // keeps track of smth
+  bool isLoading = false;
+
   // sign the user up ykwim`
   void signUp () async {
+    setState(() {
+      isLoading = true;
+    });
     showDialog(context: context, builder: (context) => const Center(child: CircularProgressIndicator.adaptive(),));
 
     if(passwordTextController.text != confirmPasswordTextController.text) {
+      setState(() {
+        isLoading = false;
+      });
       Navigator.pop(context);displayMessage("Passwords Don't Match");return;
     }
     try {
@@ -30,13 +39,20 @@ class _RegisterPageState extends State<RegisterPage> {
       // after creating user, create a new document in cloud firesotre called users
       if (userCredential.user != null ) await FirebaseFirestore.instance.collection("Users").doc(userCredential.user!.email).set({'username' : emailTextController.text.split("@")[0], 'bio' : 'empty bio...', 'interests' : 'empty interests...'});
       // if (context.mounted) Navigator.pop(context);
+      setState(() {
+        isLoading = false;
+      });
+      Navigator.pop(context);
     }
     on FirebaseAuthException catch (e) {
+      setState(() {
+        isLoading = false;
+      });
       // pop loading circle
+      Navigator.pop(context);
       // show error to user
       displayMessage(e.code);
     }
-      Navigator.pop(context);
   }
 
   void displayMessage (String alertMessage) {
@@ -49,62 +65,64 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+              
+                  // logo
+                  Icon(Icons.theater_comedy_outlined, size: 120),
+              
+                  const SizedBox(height: 50),
+              
+                  // welcome back message
+                  Text("Pray, let us craft a ledger for thee"),
+              
+                  const SizedBox(height: 50),
             
-                // logo
-                Icon(Icons.theater_comedy_outlined, size: 120),
             
-                const SizedBox(height: 50),
+                  // email text field
+                  MyTextField(controller: emailTextController, hintText: "Enter thy emailID", obscureText: false),
             
-                // welcome back message
-                Text("Pray, let us craft a ledger for thee"),
+                  const SizedBox(height: 10,),
+              
+                  // password textfield
+                  MyTextField(controller: passwordTextController, hintText: "Enter thy password", obscureText: true),
             
-                const SizedBox(height: 50),
-
-
-                // email text field
-                MyTextField(controller: emailTextController, hintText: "Enter thy emailID", obscureText: false),
-
-                const SizedBox(height: 10,),
             
-                // password textfield
-                MyTextField(controller: passwordTextController, hintText: "Enter thy password", obscureText: true),
-
-
-                const SizedBox(height: 10,),
-
-                MyTextField(controller: confirmPasswordTextController, hintText: "Confirm thy password", obscureText: true),
-
-
-                const SizedBox(height: 25,),
+                  const SizedBox(height: 10,),
             
-                // sign-in button
-                MyButton(onTap: signUp, text: "S I G N - U P"),
+                  MyTextField(controller: confirmPasswordTextController, hintText: "Confirm thy password", obscureText: true),
             
-                const SizedBox(height: 25,),
-
-
-                // goto register page
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Hast thou an account? "),
-                    GestureDetector(
-                      onTap: widget.onTap,
-                      child: Text("Enter here.", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueGrey),)
-                    )
-                  ],
-                ),
-
-                const SizedBox(height: 50,),
-              ],
+            
+                  const SizedBox(height: 25,),
+              
+                  // sign-in button
+                  MyButton(onTap: signUp, text: "S I G N - U P"),
+              
+                  const SizedBox(height: 25,),
+            
+            
+                  // goto register page
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Hast thou an account? "),
+                      GestureDetector(
+                        onTap: widget.onTap,
+                        child: Text("Enter here.", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueGrey),)
+                      )
+                    ],
+                  ),
+            
+                  const SizedBox(height: 50,),
+                ],
+              ),
             ),
           ),
         ),

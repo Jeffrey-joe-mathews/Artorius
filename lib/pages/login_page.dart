@@ -43,56 +43,58 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+              
+                  // logo
+                  Icon(Icons.theater_comedy_outlined, size: 120),
+              
+                  const SizedBox(height: 50),
+              
+                  // welcome back message
+                  Text("Well met, Thou has sorely been missed"),
+              
+                  const SizedBox(height: 50),
             
-                // logo
-                Icon(Icons.theater_comedy_outlined, size: 120),
             
-                const SizedBox(height: 50),
+                  // email text field
+                  MyTextField(controller: emailTextController, hintText: "Enter your emailID", obscureText: false),
             
-                // welcome back message
-                Text("Well met, Thou has sorely been missed"),
+                  const SizedBox(height: 10,),
+              
+                  // password textfield
+                  MyTextField(controller: passwordTextController, hintText: "Enter your password", obscureText: true),
             
-                const SizedBox(height: 50),
-
-
-                // email text field
-                MyTextField(controller: emailTextController, hintText: "Enter your emailID", obscureText: false),
-
-                const SizedBox(height: 10,),
+                  const SizedBox(height: 25,),
+              
+                  // sign-in button
+                  MyButton(onTap: signIn, text: "L O G I N"),
+              
+                  const SizedBox(height: 25,),
             
-                // password textfield
-                MyTextField(controller: passwordTextController, hintText: "Enter your password", obscureText: true),
-
-                const SizedBox(height: 25,),
             
-                // sign-in button
-                MyButton(onTap: signIn, text: "L O G I N"),
+                  // goto register page
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Wilt thou not be a member? "),
+                      GestureDetector(
+                        onTap: widget.onTap,
+                        child: Text("Enlist thyself.", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueGrey),)
+                      )
+                    ],
+                  ),
             
-                const SizedBox(height: 25,),
-
-
-                // goto register page
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Wilt thou not be a member? "),
-                    GestureDetector(
-                      onTap: widget.onTap,
-                      child: Text("Enlist thyself.", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueGrey),)
-                    )
-                  ],
-                ),
-
-                const SizedBox(height: 50,),
-              ],
+                  const SizedBox(height: 50,),
+                ],
+              ),
             ),
           ),
         ),

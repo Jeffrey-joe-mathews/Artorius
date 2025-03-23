@@ -8,6 +8,7 @@ import 'package:artorius/helper/helper_method.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class FeedPost extends StatefulWidget {
   final String message;
@@ -16,7 +17,10 @@ class FeedPost extends StatefulWidget {
   final String postID;
   final List<String> likes;
   final String? imageUrl; // Image URL is nullable
-  const FeedPost({super.key, required this.message, required this.user, required this.time, required this.likes, required this.postID, required this.imageUrl});
+  final double? latitude;
+  final double? longitude;
+  final String? address;
+  const FeedPost({super.key, required this.message, required this.user, required this.time, required this.likes, required this.postID, required this.imageUrl, required this.latitude, required this.longitude, required this.address});
 
   @override
   State<FeedPost> createState() => _FeedPostState();
@@ -95,6 +99,30 @@ class _FeedPostState extends State<FeedPost> {
     ),);
   }
 
+  void openGoogleMaps() async {
+    if(widget.latitude!=null && widget.longitude!=null) {
+      final url = Uri.parse('https://www.google.com/maps?q=${widget.latitude},${widget.longitude}');
+      if (await canLaunchUrl(url)) {
+        await launchUrl(url);
+      } else {
+        showDialog(context: context, builder:(context) => AlertDialog(
+      title: Text("Could not launch google maps"),
+      actions: [
+        TextButton(onPressed: () { Navigator.pop(context); commentController.clear(); }, child: Text("Cancel", style: TextStyle(color: Colors.red),)),
+      ],
+    ),);
+      }
+    }
+    else {
+     showDialog(context: context, builder:(context) => AlertDialog(
+      title: Text("Invalid Co-ordinates"),
+      actions: [
+        TextButton(onPressed: () { Navigator.pop(context); commentController.clear(); }, child: Text("Cancel", style: TextStyle(color: Colors.red),)),
+      ],
+    ),); 
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -127,7 +155,8 @@ class _FeedPostState extends State<FeedPost> {
                 ],
               ),
               // Delete button, only for the post owner
-              if (widget.user == currentUser!.email) DeleteButton(onTap: deletePost),
+              if (widget.user == currentUser!.email) DeleteButton(onTap: deletePost) 
+              // else LeadButton(onTap: leadPost),
             ], 
           ),
           
@@ -136,6 +165,21 @@ class _FeedPostState extends State<FeedPost> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: Image.network(widget.imageUrl!),
+            ),
+
+          if(widget.address != null) 
+            GestureDetector(
+              onTap: openGoogleMaps,
+              child: Row(
+                children: [
+                  Icon(Icons.pin_drop),
+                  Text("Address : ${"${widget.address!.substring(0, 17)}..."??"Address not Provided"}",
+                    style: TextStyle(color: Colors.blue),
+                  ),
+                  
+                  ],
+                
+              ),
             ),
           
           const SizedBox(height: 5,),

@@ -36,6 +36,9 @@ class _HomePageState extends State<HomePage> {
   // Location CO-ordinates
   LatLng _currentLocation = LatLng(0.0, 0.0);
 
+  // storing the address corresponding to the latitude
+  String? _address = "";
+
   // get current location when the app loads
   @override
   void initState () {
@@ -115,6 +118,9 @@ class _HomePageState extends State<HomePage> {
           'TimeStamp': Timestamp.now(),
           'Likes': [],
           'ImageUrl': imageUrl ?? "", // Save the image URL if exists
+          'Latitude' : _currentLocation.latitude,
+          'Longitude' : _currentLocation.longitude,
+          'Address' : _address,
         });
       } else {
         // No image, just store the message
@@ -124,6 +130,9 @@ class _HomePageState extends State<HomePage> {
           'TimeStamp': Timestamp.now(),
           'Likes': [],
           'ImageUrl': "", // No image, store an empty string
+          'Latitude' : _currentLocation.latitude,
+          'Longitude' : _currentLocation.longitude,
+          'Address' : _address,
         });
       }
       
@@ -133,7 +142,13 @@ class _HomePageState extends State<HomePage> {
         _image = null; // Reset the selected image after posting
       });
     } catch (e) {
-      print('Error: $e');
+      showDialog(context: context, builder:(context) => AlertDialog(
+      title: Text("Event could not be posted"),
+      content: Text("Sorry for the inconvenience..."),
+      actions: [
+        TextButton(onPressed: () { Navigator.pop(context);}, child: Text("Cancel", style: TextStyle(color: Colors.red),)),
+      ],
+    ),);
     }
   }
 }
@@ -180,7 +195,14 @@ class _HomePageState extends State<HomePage> {
 
   void pickLocation () async {
     final result = await Navigator.push(context, MaterialPageRoute(builder:(context) => MapScreen(initialLocation : _currentLocation),),);
-    print("Selected Location is : $result");
+    if (result != null) {
+      double latitude = result['latitude'];
+      double longitude = result['longitude'];
+      setState(() {
+        _address = result['address'];
+        _currentLocation = LatLng(latitude, longitude);
+      });
+    }
   }
 
   @override
@@ -223,7 +245,7 @@ class _HomePageState extends State<HomePage> {
                   return ListView.builder(itemCount: snapshot.data!.docs.length, itemBuilder:(context, index) {
                     // get the message
                     final post  = snapshot.data!.docs[index];
-                    return FeedPost(message: post["Message"], user: post['UserEmail'], time: formatDate2(post['TimeStamp']), likes: List<String>.from(post['Likes'] ?? []), postID: post.id, imageUrl: post['ImageUrl']??"");
+                    return FeedPost(message: post["Message"], user: post['UserEmail'], time: formatDate2(post['TimeStamp']), likes: List<String>.from(post['Likes'] ?? []), postID: post.id, imageUrl: post['ImageUrl']??"", latitude: post['Latitude'], longitude: post['Longitude'], address: post['Address']);
                   },);
                 }
                 else if (snapshot.hasError) {

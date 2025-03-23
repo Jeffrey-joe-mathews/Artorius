@@ -70,6 +70,16 @@ class _MapScreenState extends State<MapScreen> {
     });
   }
 
+  void _submit (String address, double lat, double lon) {
+    setState(() {
+      _selectedLocation = LatLng(lat, lon);
+      _selectedAddress = address;
+      _searchController.text = address;
+      _suggestions = [];
+    });
+    Navigator.pop(context, {'latitude' : lat, 'longitude' : lon, 'address' : _selectedAddress});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -178,9 +188,7 @@ class _MapScreenState extends State<MapScreen> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             
-            child: TextButton(onPressed: () {
-              Navigator.pop(context, _selectedLocation);
-            }, child: Text(
+            child: TextButton(onPressed: () => _submit(_selectedAddress!, _selectedLocation!.latitude, _selectedLocation!.longitude), child: Text(
               "Comfirm Location",
               style: TextStyle(color: Colors.green),
             )),
