@@ -14,8 +14,8 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
-  // Selected location coordinates
-  LatLng ?_selectedLocation;
+  // Selected location coordinates and address
+  LatLng? _selectedLocation;
   String? _selectedAddress;
   final TextEditingController _searchController = TextEditingController();
   List<dynamic> _suggestions = [];
@@ -23,20 +23,21 @@ class _MapScreenState extends State<MapScreen> {
   @override
   void initState() {
     super.initState();
-    _selectedLocation = widget.initialLocation; 
-    _selectedAddress = '';
+    _selectedLocation = widget.initialLocation; // Initialize with the passed location
+    _selectedAddress = ''; // Optional: Set an initial address if needed
   }
 
+  // Function to search for location
   Future<void> _searchLocation(String query) async {
     if (query.isEmpty) {
       setState(() {
         _suggestions = [];
       });
-      return; 
+      return;
     }
 
     final String url =
-        "https://nominatim.openstreetmap.org/search?q=$query&format=json&addressdetails=1";
+        "https://nominatim.openstreetmap.org/search?q=$query&format=json&addressdetails=1&limit=5"; // limit results
 
     final response = await http.get(Uri.parse(url));
 
@@ -44,14 +45,10 @@ class _MapScreenState extends State<MapScreen> {
       final data = json.decode(response.body);
 
       if (data.isNotEmpty) {
-        final lat = double.parse(data[0]['lat']);
-        final lon = double.parse(data[0]['lon']);
         setState(() {
-          _selectedLocation = LatLng(lat, lon);
           _suggestions = data;
         });
       } else {
-        // If no location is found, show a message
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Location not found")),
         );
@@ -61,10 +58,11 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
-  void suggestionSelected (String address, double lat, double lon) {
+  // Update selected location when a suggestion is tapped
+  void suggestionSelected(String address, double lat, double lon) {
     setState(() {
       _selectedLocation = LatLng(lat, lon);
-      _selectedAddress = address;
+      _selectedAddress = address; // Store the address of the selected location
       _searchController.text = address;
       _suggestions = [];
     });
@@ -75,18 +73,10 @@ class _MapScreenState extends State<MapScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Select Location"),
-        actions: [
-          // Search Button
-          // IconButton(
-          //   // icon: Icon(Icons.search),
-          //   onPressed: () {
-          //     _searchLocation(_searchController.text);
-          //   },
-          // ),
-        ],
       ),
       body: Column(
         children: [
+          // Search bar
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
@@ -107,36 +97,39 @@ class _MapScreenState extends State<MapScreen> {
             ),
           ),
 
-          // main query logic here
-          if (_suggestions.isNotEmpty) 
+          // Suggestions list
+          if (_suggestions.isNotEmpty)
             Container(
               height: 200,
-              child: ListView.builder(itemBuilder:(context, index) {
-                final suggestion = _suggestions[index];
-                final address = suggestion['display_name'];
-                final lat = double.parse(suggestion['lat']);
-                final lon = double.parse(suggestion['lon']);
+              child: ListView.builder(
+                itemCount: _suggestions.length,
+                itemBuilder: (context, index) {
+                  final suggestion = _suggestions[index];
+                  final address = suggestion['display_name'];
+                  final lat = double.parse(suggestion['lat']);
+                  final lon = double.parse(suggestion['lon']);
 
-                return ListTile(
-                  title: Text(address),
-                  subtitle: Text("Coordinates : $lat,$lon"),
-                  onTap: () {
-                    suggestionSelected(address, lat, lon);
-                  },
-                );
-              },),
+                  return ListTile(
+                    title: Text(address),
+                    subtitle: Text("Coordinates: $lat, $lon"),
+                    onTap: () {
+                      suggestionSelected(address, lat, lon); // Update location on tap
+                    },
+                  );
+                },
+              ),
             ),
 
-
+          // Map displaying the selected location
           Expanded(
             child: FlutterMap(
               options: MapOptions(
-                center: _selectedLocation, 
+                center: _selectedLocation ?? LatLng(0.0, 0.0), // Default to (0,0) if no location
                 zoom: 14.0,
                 onTap: (tapPosition, point) {
                   setState(() {
-                    _selectedLocation = point; 
-                    _selectedAddress= null;
+                    _selectedLocation = point; // Update location on map tap
+                    _selectedAddress = null; // Reset the address text if tapping on map
                   });
                 },
               ),
@@ -164,35 +157,28 @@ class _MapScreenState extends State<MapScreen> {
             ),
           ),
 
-
+          // Display the selected address (if any) or coordinates
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
               _selectedAddress ??
-              "Selected Coordinates: ${_selectedLocation!.latitude}, ${_selectedLocation!.longitude}",
+                  "Selected Coordinates: ${_selectedLocation!.latitude}, ${_selectedLocation!.longitude}",
               style: TextStyle(fontSize: 18),
             ),
           ),
 
-
+          // Button to confirm location selection
           Padding(
             padding: const EdgeInsets.all(8.0),
-            
-            child: TextButton(onPressed: () {
-              Navigator.pop(context, _selectedLocation);
-            }, child: Text(
-              "Comfirm Location",
-              style: TextStyle(color: Colors.green),
-            )),
-
-            // child: ElevatedButton(
-            //   onPressed: () {
-            //     Navigator.pop(context, _selectedLocation); 
-            //   },
-            //   child: Text("Confirm Location" ),
-            // ),
-
-
+            child: TextButton(
+              onPressed: () {
+                Navigator.pop(context, _selectedLocation); // Return selected location to previous screen
+              },
+              child: Text(
+                "Confirm Location",
+                style: TextStyle(color: Colors.green),
+              ),
+            ),
           ),
         ],
       ),
