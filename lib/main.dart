@@ -1,5 +1,6 @@
 import 'package:artorius/auth/auth.dart';
 import 'package:artorius/firebase_options.dart';
+import 'package:artorius/pages/map_screen.dart';
 import 'package:artorius/theme/dark_theme.dart';
 import 'package:artorius/theme/light_theme.dart';
 import 'package:firebase_core/firebase_core.dart';

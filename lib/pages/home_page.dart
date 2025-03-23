@@ -2,14 +2,18 @@ import 'package:artorius/components/drawer.dart';
 import 'package:artorius/components/feed_post.dart';
 import 'package:artorius/components/text_field.dart';
 import 'package:artorius/helper/helper_method.dart';
+import 'package:artorius/pages/map_screen.dart';
 import 'package:artorius/pages/profile_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloudinary/cloudinary.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+
+import 'package:latlong2/latlong.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -29,11 +33,72 @@ class _HomePageState extends State<HomePage> {
   // image from system
   XFile? _image;
 
+  // Location CO-ordinates
+  LatLng _currentLocation = LatLng(0.0, 0.0);
+
+  // get current location when the app loads
+  @override
+  void initState () {
+    super.initState();
+    _getCurrentLocation();
+  }
+
+  // get current Location
+  Future<void> _getCurrentLocation () async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // check if user has enabled location services
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      showDialog(context: context, builder:(context) => AlertDialog(
+        title: Text("Location Service Disabled"),
+        content: Text("Please enable your location service to add coordinates"),
+        actions: [
+          TextButton(onPressed: () {
+            Geolocator.openAppSettings();
+            Navigator.pop(context);
+          }, child: Text("Enable Location", style: TextStyle(color: Colors.green),)),
+          TextButton(onPressed: () => 
+          Navigator.pop, 
+            child: Text("Cancel", style: TextStyle(color: Colors.red),)),
+        ],
+      ),);
+      return;
+    }
+    permission = await Geolocator.checkPermission(); 
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission != LocationPermission.whileInUse &&
+          permission != LocationPermission.always) {
+        // If permission is denied permanently, show an error and return
+        showDialog(context: context, builder:(context) => AlertDialog(
+        title: Text("Location Permission Debied"),
+        content: Text("Please enable your location service to add coordinates"),
+        actions: [
+          TextButton(onPressed: () => 
+          Navigator.pop, 
+            child: Text("Cancel", style: TextStyle(color: Colors.red),)),
+        ],
+      ),);
+        return;
+      }
+    }
+
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high);
+      setState(() {
+        _currentLocation = LatLng(position.latitude, position.longitude);
+      });
+
+  }
+
   void signOut () {
     FirebaseAuth.instance.signOut();
   }
 
-void postMessage() async {
+  void postMessage() async {
   if (textController.text.isNotEmpty || _image != null) {
     // If there's a message or an image
     String? imageUrl;
@@ -113,6 +178,11 @@ void postMessage() async {
     }
   }
 
+  void pickLocation () async {
+    final result = await Navigator.push(context, MaterialPageRoute(builder:(context) => MapScreen(initialLocation : _currentLocation),),);
+    print("Selected Location is : $result");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -173,6 +243,7 @@ void postMessage() async {
               children: [
                 // text field
                 Expanded(child: MyTextField(controller: textController, hintText: "Post A Message", obscureText: false)),
+                IconButton(onPressed: pickLocation, icon: Icon(Icons.map)),
                 IconButton(onPressed: pickImage ,icon: Icon(Icons.attachment)),
                 IconButton(onPressed: postMessage, icon: Icon(Icons.send)),
               ],
