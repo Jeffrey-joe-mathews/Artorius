@@ -5,6 +5,7 @@ import 'package:artorius/helper/helper_method.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LeadPage extends StatefulWidget {
@@ -18,6 +19,7 @@ class LeadPage extends StatefulWidget {
   final double? longitude;
   final String? address;
   final bool isLiked;
+  final void Function()? toggleLike;
   const LeadPage({
     super.key,
     required this.message,
@@ -29,7 +31,8 @@ class LeadPage extends StatefulWidget {
     required this.latitude,
     required this.longitude,
     required this.address,
-    required this.isLiked
+    required this.isLiked,
+    required this.toggleLike,
   });
 
   @override
@@ -80,24 +83,6 @@ class _LeadPageState extends State<LeadPage> {
       'CommentTime': Timestamp.now()
     });
   }
-
-    void toggleLike () {
-    setState(() {
-      widget.isLiked == !widget.isLiked;
-      DocumentReference postRef = FirebaseFirestore.instance.collection("User Post's").doc(widget.postID);
-
-      if (widget.isLiked) {
-        postRef.update({
-          'Likes': FieldValue.arrayUnion([currentUser!.email])
-        });
-      } else {
-        postRef.update({
-          'Likes': FieldValue.arrayRemove([currentUser!.email])
-        });
-      }
-    });
-  }
-
         void showCommentDialog () {
     showDialog(context: context, builder:(context) => AlertDialog(
       title: Text("Add Comment"),
@@ -135,6 +120,37 @@ class _LeadPageState extends State<LeadPage> {
                   maxLines: 7,
                 ),
 
+                // SizedBox(
+                //     width: MediaQuery.of(context).size.width * 0.65,
+                //     child: SingleChildScrollView(
+                //       physics: NeverScrollableScrollPhysics(),
+                //       padding: EdgeInsets.zero,
+                //       child: 
+                //       MarkdownBody(
+                //         data : widget.message,
+                //         softLineBreak: true,
+                //         shrinkWrap: true,
+                //         fitContent: true,
+                //         styleSheet: MarkdownStyleSheet(
+                //           h1: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                //           h2: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                //           p: TextStyle(fontSize: 16),
+                //         ),
+                        
+                //         ),
+                    
+                //       // without markdown :
+                //       // Text(
+                //       //     widget.message.replaceAll(RegExp(r'(\*\*|__|\*|_)'), ''), // Remove Markdown formatting
+                //       //     maxLines: 3,
+                //       //     overflow: TextOverflow.ellipsis,
+                //       //     style: TextStyle(fontSize: 16),
+                //       //   ),
+                    
+                    
+                //     ),
+                //   ),
+
                 const SizedBox(height: 10,),
 
                 Text(
@@ -156,7 +172,7 @@ class _LeadPageState extends State<LeadPage> {
                 const SizedBox(height: 7,),
 
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  padding: const EdgeInsets.symmetric(horizontal: 35),
                   child: const Divider(thickness: 2,),
                 ),
 
@@ -195,13 +211,20 @@ class _LeadPageState extends State<LeadPage> {
 
                   const SizedBox(height: 10,),
 
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 35),
+                  child: const Divider(thickness: 2,),
+                ),
+
+                const SizedBox(height: 10,),
+
                   Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [ 
               // Like Button and Count
               Column(
                 children: [
-                  LikeButton(isLiked: widget.isLiked, onTap: toggleLike),
+                  LikeButton(isLiked: widget.isLiked, onTap: widget.toggleLike),
                   const SizedBox(height: 5),
                   Text(widget.likes.length.toString(), style: TextStyle(color: Colors.grey)),
                 ],

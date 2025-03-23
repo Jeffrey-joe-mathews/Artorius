@@ -264,7 +264,7 @@ class _HomePageState extends State<HomePage> {
             child: Row(
               children: [
                 // text field
-                Expanded(child: MyTextField(controller: textController, hintText: "Post A Message", obscureText: false)),
+                Expanded(child: MyTextField(controller: textController, hintText: "Post A Message", obscureText: false, maxLines: null,)),
                 IconButton(onPressed: pickLocation, icon: Icon(Icons.map)),
                 IconButton(onPressed: pickImage ,icon: Icon(Icons.attachment)),
                 IconButton(onPressed: postMessage, icon: Icon(Icons.send)),

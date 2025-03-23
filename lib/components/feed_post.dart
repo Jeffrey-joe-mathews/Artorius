@@ -10,6 +10,7 @@ import 'package:artorius/pages/lead_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class FeedPost extends StatefulWidget {
@@ -156,7 +157,50 @@ class _FeedPostState extends State<FeedPost> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(widget.message),
+                  // SizedBox(
+                  //   width: MediaQuery.of(context).size.width * 0.65,
+                  //   child: SingleChildScrollView(
+                  //     physics: NeverScrollableScrollPhysics(),
+                  //     padding: EdgeInsets.zero,
+                  //     child: 
+                  //     MarkdownBody(
+                  //       data : widget.message,
+                  //       softLineBreak: true,
+                  //       shrinkWrap: true,
+                  //       fitContent: true,
+                  //       styleSheet: MarkdownStyleSheet(
+                  //         h1: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  //         h2: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  //         p: TextStyle(fontSize: 16),
+                  //       ),
+                        
+                  //       ),
+                    
+                  //     // without markdown :
+                  //     // Text(
+                  //     //     widget.message.replaceAll(RegExp(r'(\*\*|__|\*|_)'), ''), // Remove Markdown formatting
+                  //     //     maxLines: 3,
+                  //     //     overflow: TextOverflow.ellipsis,
+                  //     //     style: TextStyle(fontSize: 16),
+                  //     //   ),
+                    
+                    
+                  //   ),
+                  // ),
+                   SizedBox(
+                    width: MediaQuery.of(context).size.width*0.65,
+                     child: SingleChildScrollView(
+                      physics: NeverScrollableScrollPhysics(),
+                      padding: EdgeInsets.zero,
+                       child: Text(
+                          widget.message.replaceAll(RegExp(r'(\*\*|__|\*|_)'), ''), // Remove Markdown formatting
+                          maxLines: 3,
+                          softWrap: true,
+                          overflow: TextOverflow.clip,
+                          style: TextStyle(fontSize: 16, overflow: TextOverflow.ellipsis),
+                                         ),
+                     ),
+                   ),
                   const SizedBox(height: 8,),
                   Row(
                     children: [
@@ -175,7 +219,7 @@ class _FeedPostState extends State<FeedPost> {
               DeleteButton(onTap: deletePost) 
               : 
               GestureDetector(
-                child: Icon(Icons.ac_unit_sharp),
+                child: Icon(Icons.event_note_rounded),
                 onTap:() => Navigator.push(
                   context, 
                   MaterialPageRoute(
@@ -191,6 +235,7 @@ class _FeedPostState extends State<FeedPost> {
                         address: widget.address,
                         imageUrl: widget.imageUrl,
                         isLiked: isLiked,
+                        toggleLike: toggleLike,
                       ),)),
               ),
             ], 

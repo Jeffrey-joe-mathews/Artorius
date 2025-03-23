@@ -18,7 +18,7 @@ class MyDrawer extends StatelessWidget {
               Column(
                 children: [
                   // logo
-              DrawerHeader(child: Icon(Icons.theater_comedy_outlined, color: Colors.white,size: 80,),),
+              DrawerHeader(child: Icon(Icons.theater_comedy_outlined,size: 80,),),
 
               // homepage button
               // MyListItem(navItem: "H O M E", icon: Icons.home)

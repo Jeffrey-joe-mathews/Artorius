@@ -47,6 +47,7 @@ dependencies:
   permission_handler: ^11.4.0
   http: ^0.13.6
   url_launcher: ^6.3.1
+  flutter_markdown: ^0.7.6+2
 
 
 dev_dependencies:
