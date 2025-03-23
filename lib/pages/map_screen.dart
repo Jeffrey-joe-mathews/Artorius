@@ -16,14 +16,21 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
   // Selected location coordinates
   LatLng ?_selectedLocation;
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
+  List<dynamic> _suggestions = [];
 
   @override
   void initState() {
     super.initState();
+    _selectedLocation = widget.initialLocation; // Initialize with the passed location
   }
   Future<void> _searchLocation(String query) async {
-    if (query.isEmpty) return;
+    if (query.isEmpty) {
+      setState(() {
+        _suggestions = [];
+      });
+      return; 
+    }
 
     final String url =
         "https://nominatim.openstreetmap.org/search?q=$query&format=json&addressdetails=1";
@@ -38,6 +45,7 @@ class _MapScreenState extends State<MapScreen> {
         final lon = double.parse(data[0]['lon']);
         setState(() {
           _selectedLocation = LatLng(lat, lon);
+          _suggestions = data;
         });
       } else {
         // If no location is found, show a message
@@ -50,6 +58,14 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
+  void suggestionSelected (String address, double lat, double lon) {
+    setState(() {
+      _selectedLocation = LatLng(lat, lon);
+      _searchController.text = address;
+      _suggestions = [];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,12 +73,12 @@ class _MapScreenState extends State<MapScreen> {
         title: Text("Select Location"),
         actions: [
           // Search Button
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              _searchLocation(_searchController.text);
-            },
-          ),
+          // IconButton(
+          //   // icon: Icon(Icons.search),
+          //   onPressed: () {
+          //     _searchLocation(_searchController.text);
+          //   },
+          // ),
         ],
       ),
       body: Column(
@@ -72,7 +88,7 @@ class _MapScreenState extends State<MapScreen> {
             child: TextField(
               controller: _searchController,
               decoration: InputDecoration(
-                labelText: "Search Location",
+                labelText: "Search Location...",
                 border: OutlineInputBorder(),
                 suffixIcon: IconButton(
                   icon: Icon(Icons.search),
@@ -81,9 +97,33 @@ class _MapScreenState extends State<MapScreen> {
                   },
                 ),
               ),
+              onChanged: (text) {
+                _searchLocation(_searchController.text);
+              },
             ),
           ),
-          // FlutterMap widget to display OpenStreetMap
+
+          // main query logic here
+          if (_suggestions.isNotEmpty) 
+            Container(
+              height: 200,
+              child: ListView.builder(itemBuilder:(context, index) {
+                final suggestion = _suggestions[index];
+                final address = suggestion['display_name'];
+                final lat = double.parse(suggestion['lat']);
+                final lon = double.parse(suggestion['lon']);
+
+                return ListTile(
+                  title: Text(address),
+                  subtitle: Text("Coordinates : $lat,$lon"),
+                  onTap: () {
+                    suggestionSelected(address, lat, lon);
+                  },
+                );
+              },),
+            ),
+
+
           Expanded(
             child: FlutterMap(
               options: MapOptions(
@@ -108,8 +148,8 @@ class _MapScreenState extends State<MapScreen> {
                       height: 80.0,
                       point: _selectedLocation!,
                       builder: (ctx) => Icon(
-                        Icons.location_on,
-                        color: Colors.red,
+                        Icons.location_on_outlined,
+                        color: Colors.black,
                         size: 40.0,
                       ),
                     ),
@@ -131,12 +171,22 @@ class _MapScreenState extends State<MapScreen> {
 
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context, _selectedLocation); 
-              },
-              child: Text("Confirm Selection"),
-            ),
+            
+            child: TextButton(onPressed: () {
+              Navigator.pop(context, _selectedLocation);
+            }, child: Text(
+              "Comfirm Location",
+              style: TextStyle(color: Colors.green),
+            )),
+
+            // child: ElevatedButton(
+            //   onPressed: () {
+            //     Navigator.pop(context, _selectedLocation); 
+            //   },
+            //   child: Text("Confirm Location" ),
+            // ),
+
+
           ),
         ],
       ),
