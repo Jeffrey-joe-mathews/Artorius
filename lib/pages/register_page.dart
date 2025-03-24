@@ -81,23 +81,23 @@ class _RegisterPageState extends State<RegisterPage> {
                   const SizedBox(height: 50),
               
                   // welcome back message
-                  Text("Pray, let us craft a ledger for thee"),
+                  Text("Let us make you an account"),
               
                   const SizedBox(height: 50),
             
             
                   // email text field
-                  MyTextField(controller: emailTextController, hintText: "Enter thy emailID", obscureText: false, maxLines: 1),
+                  MyTextField(controller: emailTextController, hintText: "Enter your email ID", obscureText: false, maxLines: 1),
             
                   const SizedBox(height: 10,),
               
                   // password textfield
-                  MyTextField(controller: passwordTextController, hintText: "Enter thy password", obscureText: true, maxLines: 1),
+                  MyTextField(controller: passwordTextController, hintText: "Enter your password", obscureText: true, maxLines: 1),
             
             
                   const SizedBox(height: 10,),
             
-                  MyTextField(controller: confirmPasswordTextController, hintText: "Confirm thy password", obscureText: true, maxLines: 1),
+                  MyTextField(controller: confirmPasswordTextController, hintText: "Confirm password", obscureText: true, maxLines: 1),
             
             
                   const SizedBox(height: 25,),
@@ -112,7 +112,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Hast thou an account? "),
+                      Text("Already have an account? "),
                       GestureDetector(
                         onTap: widget.onTap,
                         child: Text("Enter here.", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueGrey),)

@@ -59,13 +59,13 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 50),
               
                   // welcome back message
-                  Text("Well met, Thou has sorely been missed"),
+                  Text("Welcome back, You have been missed"),
               
                   const SizedBox(height: 50),
             
             
                   // email text field
-                  MyTextField(controller: emailTextController, hintText: "Enter your emailID", obscureText: false, maxLines: 1,),
+                  MyTextField(controller: emailTextController, hintText: "Enter your email ID", obscureText: false, maxLines: 1,),
             
                   const SizedBox(height: 10,),
               
@@ -84,10 +84,10 @@ class _LoginPageState extends State<LoginPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Wilt thou not be a member? "),
+                      Text("Not a member? "),
                       GestureDetector(
                         onTap: widget.onTap,
-                        child: Text("Enlist thyself.", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueGrey),)
+                        child: Text("Register here.", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueGrey),)
                       )
                     ],
                   ),

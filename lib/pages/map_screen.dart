@@ -35,10 +35,9 @@ class _MapScreenState extends State<MapScreen> {
       return; 
     }
 
-    final String url =
-        "https://nominatim.openstreetmap.org/search?q=$query&format=json&addressdetails=1";
-
-    final response = await http.get(Uri.parse(url));
+    try {
+    final response = await http.get(Uri.parse(
+        "https://nominatim.openstreetmap.org/search?q=$query&format=json&addressdetails=1"));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
@@ -51,15 +50,19 @@ class _MapScreenState extends State<MapScreen> {
           _suggestions = data;
         });
       } else {
-        // If no location is found, show a message
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Location not found")),
-        );
+        _showError("No results found");
       }
     } else {
-      print("Failed to fetch location data");
+      _showError("Failed to fetch location data");
     }
+  } catch (e) {
+    _showError("Error fetching location: $e");
   }
+}
+
+void _showError(String message) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+}
 
   void suggestionSelected (String address, double lat, double lon) {
     setState(() {
@@ -71,9 +74,10 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   void _submit (String address, double lat, double lon) {
+    String finalAddress = (address == null || address.isEmpty) ? "$lat, $lon" : address;
     setState(() {
       _selectedLocation = LatLng(lat, lon);
-      _selectedAddress = address;
+      _selectedAddress = finalAddress;
       _searchController.text = address;
       _suggestions = [];
     });
@@ -121,11 +125,13 @@ class _MapScreenState extends State<MapScreen> {
           if (_suggestions.isNotEmpty) 
             Container(
               height: 200,
-              child: ListView.builder(itemBuilder:(context, index) {
-                final suggestion = _suggestions[index];
-                final address = suggestion['display_name'];
-                final lat = double.parse(suggestion['lat']);
-                final lon = double.parse(suggestion['lon']);
+              child: ListView.builder(
+                itemCount: _suggestions.length,
+                itemBuilder:(context, index) {
+                  final suggestion = _suggestions[index];
+                  final address = suggestion['display_name'];
+                  final lat = double.parse(suggestion['lat']);
+                  final lon = double.parse(suggestion['lon']);
 
                 return ListTile(
                   title: Text(address),

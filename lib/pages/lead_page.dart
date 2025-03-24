@@ -111,7 +111,7 @@ class _LeadPageState extends State<LeadPage> {
           padding: const EdgeInsets.all(15.0),
           child: SingleChildScrollView(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   widget.message,
@@ -185,8 +185,6 @@ class _LeadPageState extends State<LeadPage> {
 
                 const SizedBox(height: 7,),
 
-                Icon(Icons.image, size: 64,),
-
                 (widget.imageUrl != null) 
                 ?
                 Image.network(widget.imageUrl!)
@@ -194,6 +192,14 @@ class _LeadPageState extends State<LeadPage> {
                 Text("No Image Provided"),
 
                 // display event details
+                const SizedBox(height: 10,),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 35),
+                  child: const Divider(thickness: 2,),
+                ),
+
+                const SizedBox(height: 10,),
 
                 // display address
                 if (widget.address != null)

@@ -137,10 +137,8 @@ class _HomePageState extends State<HomePage> {
         });
       }
       
-      // Clear the text and reset image after posting
       textController.clear();
       setState(() {
-        _image = null; // Reset the selected image after posting
       });
     } catch (e) {
       showDialog(context: context, builder:(context) => AlertDialog(
@@ -155,15 +153,12 @@ class _HomePageState extends State<HomePage> {
 }
 
 
-  // navigate to profile page
   void goToProfilePage () {
-    // pop menu drawer
     Navigator.pop(context);
     Future.delayed(Duration(milliseconds: 300),  () {Navigator.push(context, MaterialPageRoute(builder:(context) => ProfilePage(),));});
 
   }
 
-  // get the image from camera or local storage
   Future<void> pickImage () async {
     final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
     setState(() {
@@ -172,7 +167,6 @@ class _HomePageState extends State<HomePage> {
   }
 
    Future<String> uploadImageToCloudinary(File imageFile) async {
-    // Use the Cloudinary package to upload the image and get the URL
     final cloudName = dotenv.env['CLOUDINARY_CLOUD_NAME']!;
     final apiKey = dotenv.env['CLOUDINARY_API_KEY']!;
     final apiSecret = dotenv.env['CLOUDINARY_API_SECRET']!;
@@ -273,30 +267,37 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         
-          // logged in as?
-          // const SizedBox(height: 15,),
-        
           ],
         
         
         ),
       ),
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 80.0), // Adjust positioning above the text field
-        child: Align(
-          alignment: Alignment.bottomRight,
-          child: FloatingActionButton(
-            backgroundColor: Theme.of(context).colorScheme.tertiary,
-          onPressed: () {
-            Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => NewPostPage()), // Replace with your page
-          );
-        },
-          child: Icon(Icons.add, color: Theme.of(context).colorScheme.onBackground,),
-          ),
-        ),
-      ),
+  padding: const EdgeInsets.only(bottom: 80.0),
+  child: Align(
+    alignment: Alignment.bottomRight,
+    child: FloatingActionButton(
+      backgroundColor: Theme.of(context).colorScheme.tertiary,
+      onPressed: () async {
+        try {
+        final result = await Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => NewPostPage()),
+        );
+
+        if (result != null) {
+          setState(() {});
+        }
+        }
+        catch(e) {
+          debugPrint("error opening new post page $e");
+        }
+      },
+      child: Icon(Icons.add, color: Theme.of(context).colorScheme.onBackground),
+    ),
+  ),
+),
+
     );
   }
 }
