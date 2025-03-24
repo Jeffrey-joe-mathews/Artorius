@@ -3,6 +3,7 @@ import 'package:artorius/components/feed_post.dart';
 import 'package:artorius/components/text_field.dart';
 import 'package:artorius/helper/helper_method.dart';
 import 'package:artorius/pages/map_screen.dart';
+import 'package:artorius/pages/new_post_page.dart';
 import 'package:artorius/pages/profile_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloudinary/cloudinary.dart';
@@ -278,6 +279,22 @@ class _HomePageState extends State<HomePage> {
           ],
         
         
+        ),
+      ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 80.0), // Adjust positioning above the text field
+        child: Align(
+          alignment: Alignment.bottomRight,
+          child: FloatingActionButton(
+            backgroundColor: Theme.of(context).colorScheme.tertiary,
+          onPressed: () {
+            Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => NewPostPage()), // Replace with your page
+          );
+        },
+          child: Icon(Icons.add, color: Theme.of(context).colorScheme.onBackground,),
+          ),
         ),
       ),
     );

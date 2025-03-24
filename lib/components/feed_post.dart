@@ -308,6 +308,7 @@ class _FeedPostState extends State<FeedPost> {
               );
             },
           ),
+
         ],
       ),
     );

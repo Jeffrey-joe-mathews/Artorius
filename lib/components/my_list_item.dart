@@ -12,8 +12,8 @@ class MyListItem extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 30),
       child: ListTile(
         onTap: onTap,
-        title: Text(navItem, style: TextStyle(color: Colors.white),),
-        leading: Icon(icon, color: Colors.white,),
+        title: Text(navItem),
+        leading: Icon(icon,),
       
       ),
     );

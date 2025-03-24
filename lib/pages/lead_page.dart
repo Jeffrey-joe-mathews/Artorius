@@ -115,7 +115,7 @@ class _LeadPageState extends State<LeadPage> {
               children: [
                 Text(
                   widget.message,
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 7,
                 ),
@@ -150,6 +150,13 @@ class _LeadPageState extends State<LeadPage> {
                     
                 //     ),
                 //   ),
+
+                const SizedBox(height: 10,),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 35),
+                  child: const Divider(thickness: 2,),
+                ),
 
                 const SizedBox(height: 10,),
 
