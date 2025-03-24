@@ -18,9 +18,9 @@ class NewPostPage extends StatefulWidget {
 }
 
 class _NewPostPageState extends State<NewPostPage> {
-  final TextEditingController titleController = TextEditingController();
-  final TextEditingController descriptionController = TextEditingController();
-  final TextEditingController topicController = TextEditingController();
+  final titleController = TextEditingController();
+  final descriptionController = TextEditingController();
+  final  topicController = TextEditingController();
   String? _address = "";
   String? _selectedImage;
   LatLng _currentLocation = LatLng(0.0, 0.0);
@@ -140,7 +140,7 @@ class _NewPostPageState extends State<NewPostPage> {
         'Topic': topics,
         'TimeStamp': Timestamp.now(),
         'Likes': [],
-        'ImageUrl': _selectedImage ?? "",
+        'ImageUrl': imageUrl ?? "",
         'Address': _address ?? "",
         'Latitude' : _currentLocation.latitude,
         'Longitude' : _currentLocation.longitude,
@@ -182,6 +182,7 @@ class _NewPostPageState extends State<NewPostPage> {
     if (pickedImage!=null) {
     setState(() {
       _image = pickedImage;
+      _selectedImage = pickedImage.path;
     });
     } 
   }
@@ -266,7 +267,7 @@ class _NewPostPageState extends State<NewPostPage> {
                       icon: Icon(
                         Icons.image_search,
                         size: 32,
-                        color: _selectedImage != null ? Colors.green : Colors.grey,
+                        color: _image != null ? Colors.green : Colors.grey,
                       ),
                       onPressed:() => pickImage(),
                     ),
