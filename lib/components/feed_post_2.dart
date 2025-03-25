@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class FeedPost extends StatefulWidget {
+class FeedPost2 extends StatefulWidget {
   final String title;
   final String description;
   final List<String> topic;
@@ -26,7 +26,7 @@ class FeedPost extends StatefulWidget {
   final double? longitude;
   final String? address;
   final String both;
-  const FeedPost({
+  const FeedPost2({
     super.key, 
     required this.title, 
     required this.user, 
@@ -43,10 +43,10 @@ class FeedPost extends StatefulWidget {
   });
 
   @override
-  State<FeedPost> createState() => _FeedPostState();
+  State<FeedPost2> createState() => _FeedPost2State();
 }
 
-class _FeedPostState extends State<FeedPost> {
+class _FeedPost2State extends State<FeedPost2> {
 
   final currentUser = FirebaseAuth.instance.currentUser;
   bool isLiked = false;
@@ -210,8 +210,8 @@ class _FeedPostState extends State<FeedPost> {
                   const SizedBox(height: 8,),
                   Row(
                     children: [
-                      Text(widget.user, style: TextStyle(fontSize: 12, ),),
-                      Text(" . "),
+                      // Text(widget.user, style: TextStyle(fontSize: 12, ),),
+                      // Text(" . "),
                       Text(widget.time, style: TextStyle(fontSize: 12, ),),
                     ],
                   ),
@@ -220,41 +220,41 @@ class _FeedPostState extends State<FeedPost> {
               // Delete button, only for the post owner
               // if (widget.user == currentUser!.email) DeleteButton(onTap: deletePost) 
               // else LeadButton(onTap:() => leadPost(),),
-              (widget.user == currentUser!.email && widget.both!="yes") 
-              ? 
-              DeleteButton(onTap: deletePost) 
-              : 
-              GestureDetector(
-                child: Icon(Icons.event_note_rounded),
-                onTap:() => Navigator.push(
-                  context, 
-                  MaterialPageRoute(
-                    builder:(
-                      context) => LeadPage(
-                        title: widget.title,
-                        description: widget.description,
-                        topic: widget.topic,
-                        user: widget.user,
-                        time: widget.time,
-                        postID: widget.postID,
-                        likes: widget.likes,
-                        latitude: widget.latitude,
-                        longitude: widget.longitude,
-                        address: widget.address,
-                        imageUrl: widget.imageUrl,
-                        isLiked: isLiked,
-                        toggleLike: toggleLike,
-                      ),)),
-              ),
+              // (widget.user == currentUser!.email && widget.both!="yes") 
+              // ? 
+              // // DeleteButton(onTap: deletePost) 
+              // : 
+              // GestureDetector(
+              //   child: Icon(Icons.event_note_rounded),
+              //   onTap:() => Navigator.push(
+              //     context, 
+              //     MaterialPageRoute(
+              //       builder:(
+              //         context) => LeadPage(
+              //           title: widget.title,
+              //           description: widget.description,
+              //           topic: widget.topic,
+              //           user: widget.user,
+              //           time: widget.time,
+              //           postID: widget.postID,
+              //           likes: widget.likes,
+              //           latitude: widget.latitude,
+              //           longitude: widget.longitude,
+              //           address: widget.address,
+              //           imageUrl: widget.imageUrl,
+              //           isLiked: isLiked,
+              //           toggleLike: toggleLike,
+              //         ),)),
+              // ),
             ], 
           ),
           
           // Image (display only if it exists)
-          if (widget.imageUrl != null && widget.imageUrl!.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Image.network(widget.imageUrl!),
-            ),
+          // if (widget.imageUrl != null && widget.imageUrl!.isNotEmpty)
+          //   Padding(
+          //     padding: const EdgeInsets.symmetric(vertical: 8.0),
+          //     child: Image.network(widget.imageUrl!),
+          //   ),
 
           if(widget.address != null) 
             GestureDetector(
@@ -296,27 +296,62 @@ class _FeedPostState extends State<FeedPost> {
                 ],
               ), 
 
+              Column(
+                children: [
+                  DeleteButton(onTap: deletePost) 
+                ],
+              ),
+
+              Column(
+                children: [
+                  GestureDetector(
+                child: Icon(Icons.event_note_rounded),
+                onTap:() => Navigator.push(
+                  context, 
+                  MaterialPageRoute(
+                    builder:(
+                      context) => LeadPage(
+                        title: widget.title,
+                        description: widget.description,
+                        topic: widget.topic,
+                        user: widget.user,
+                        time: widget.time,
+                        postID: widget.postID,
+                        likes: widget.likes,
+                        latitude: widget.latitude,
+                        longitude: widget.longitude,
+                        address: widget.address,
+                        imageUrl: widget.imageUrl,
+                        isLiked: isLiked,
+                        toggleLike: toggleLike,
+                      ),)),
+              ),
+                ],
+              )
+
+
+
             ],
           ),
 
           const SizedBox(height: 15,),
           // Comments Stream
-          StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance.collection("User Post's").doc(widget.postID).collection("Comments").orderBy("CommentTime", descending: true).snapshots(), 
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              return ListView(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                children: snapshot.data!.docs.map((doc) {
-                  final commentData = doc.data() as Map<String, dynamic>;
-                  return Comments(comment: commentData['CommentText'], time: formatDate(commentData['CommentTime']), user: commentData['CommentedBy']);
-                }).toList(),
-              );
-            },
-          ),
+          // StreamBuilder<QuerySnapshot>(
+          //   stream: FirebaseFirestore.instance.collection("User Post's").doc(widget.postID).collection("Comments").orderBy("CommentTime", descending: true).snapshots(), 
+          //   builder: (context, snapshot) {
+          //     if (!snapshot.hasData) {
+          //       return const Center(child: CircularProgressIndicator());
+          //     }
+          //     return ListView(
+          //       shrinkWrap: true,
+          //       physics: const NeverScrollableScrollPhysics(),
+          //       children: snapshot.data!.docs.map((doc) {
+          //         final commentData = doc.data() as Map<String, dynamic>;
+          //         return Comments(comment: commentData['CommentText'], time: formatDate(commentData['CommentTime']), user: commentData['CommentedBy']);
+          //       }).toList(),
+          //     );
+          //   },
+          // ),
 
         ],
       ),

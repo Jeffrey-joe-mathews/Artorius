@@ -39,10 +39,6 @@ class _RegisterPageState extends State<RegisterPage> {
       // after creating user, create a new document in cloud firesotre called users
       if (userCredential.user != null ) await FirebaseFirestore.instance.collection("Users").doc(userCredential.user!.email).set({'username' : emailTextController.text.split("@")[0], 'bio' : 'empty bio...', 'interests' : 'empty interests...'});
       // if (context.mounted) Navigator.pop(context);
-      setState(() {
-        isLoading = false;
-      });
-      Navigator.pop(context);
     }
     on FirebaseAuthException catch (e) {
       setState(() {
@@ -116,7 +112,8 @@ class _RegisterPageState extends State<RegisterPage> {
                       GestureDetector(
                         onTap: widget.onTap,
                         child: Text("Enter here.", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueGrey),)
-                      )
+                      
+)
                     ],
                   ),
             

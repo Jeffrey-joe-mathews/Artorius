@@ -102,55 +102,55 @@ class _HomePageState extends State<HomePage> {
     FirebaseAuth.instance.signOut();
   }
 
-  void postMessage() async {
-  if (textController.text.isNotEmpty || _image != null) {
-    // If there's a message or an image
-    String? imageUrl;
+//   void postMessage() async {
+//   if (textController.text.isNotEmpty || _image != null) {
+//     // If there's a message or an image
+//     String? imageUrl;
 
-    try {
-      if (_image != null) {
-        // Upload image to Cloudinary and get the image URL
-        imageUrl = await uploadImageToCloudinary(File(_image!.path));
+//     try {
+//       if (_image != null) {
+//         // Upload image to Cloudinary and get the image URL
+//         imageUrl = await uploadImageToCloudinary(File(_image!.path));
 
-        // Store the message and image URL in Firestore
-        await FirebaseFirestore.instance.collection("User Post's").add({
-          'UserEmail': FirebaseAuth.instance.currentUser!.email,
-          'Message': textController.text,
-          'TimeStamp': Timestamp.now(),
-          'Likes': [],
-          'ImageUrl': imageUrl ?? "", // Save the image URL if exists
-          'Latitude' : _currentLocation.latitude,
-          'Longitude' : _currentLocation.longitude,
-          'Address' : _address,
-        });
-      } else {
-        // No image, just store the message
-        await FirebaseFirestore.instance.collection("User Post's").add({
-          'UserEmail': FirebaseAuth.instance.currentUser!.email,
-          'Message': textController.text,
-          'TimeStamp': Timestamp.now(),
-          'Likes': [],
-          'ImageUrl': "", // No image, store an empty string
-          'Latitude' : _currentLocation.latitude,
-          'Longitude' : _currentLocation.longitude,
-          'Address' : _address,
-        });
-      }
+//         // Store the message and image URL in Firestore
+//         await FirebaseFirestore.instance.collection("User Post's").add({
+//           'UserEmail': FirebaseAuth.instance.currentUser!.email,
+//           'Message': textController.text,
+//           'TimeStamp': Timestamp.now(),
+//           'Likes': [],
+//           'ImageUrl': imageUrl ?? "", // Save the image URL if exists
+//           'Latitude' : _currentLocation.latitude,
+//           'Longitude' : _currentLocation.longitude,
+//           'Address' : _address,
+//         });
+//       } else {
+//         // No image, just store the message
+//         await FirebaseFirestore.instance.collection("User Post's").add({
+//           'UserEmail': FirebaseAuth.instance.currentUser!.email,
+//           'Message': textController.text,
+//           'TimeStamp': Timestamp.now(),
+//           'Likes': [],
+//           'ImageUrl': "", // No image, store an empty string
+//           'Latitude' : _currentLocation.latitude,
+//           'Longitude' : _currentLocation.longitude,
+//           'Address' : _address,
+//         });
+//       }
       
-      textController.clear();
-      setState(() {
-      });
-    } catch (e) {
-      showDialog(context: context, builder:(context) => AlertDialog(
-      title: Text("Event could not be posted"),
-      content: Text("Sorry for the inconvenience..."),
-      actions: [
-        TextButton(onPressed: () { Navigator.pop(context);}, child: Text("Cancel", style: TextStyle(color: Colors.red),)),
-      ],
-    ),);
-    }
-  }
-}
+//       textController.clear();
+//       setState(() {
+//       });
+//     } catch (e) {
+//       showDialog(context: context, builder:(context) => AlertDialog(
+//       title: Text("Event could not be posted"),
+//       content: Text("Sorry for the inconvenience..."),
+//       actions: [
+//         TextButton(onPressed: () { Navigator.pop(context);}, child: Text("Cancel", style: TextStyle(color: Colors.red),)),
+//       ],
+//     ),);
+//     }
+//   }
+// }
 
 
   void goToProfilePage () {
@@ -159,46 +159,46 @@ class _HomePageState extends State<HomePage> {
 
   }
 
-  Future<void> pickImage () async {
-    final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
-    setState(() {
-      _image = pickedImage;
-    }); 
-  }
+  // Future<void> pickImage () async {
+  //   final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
+  //   setState(() {
+  //     _image = pickedImage;
+  //   }); 
+  // }
 
-   Future<String> uploadImageToCloudinary(File imageFile) async {
-    final cloudName = dotenv.env['CLOUDINARY_CLOUD_NAME']!;
-    final apiKey = dotenv.env['CLOUDINARY_API_KEY']!;
-    final apiSecret = dotenv.env['CLOUDINARY_API_SECRET']!;
-    final cloudinary = Cloudinary.signedConfig(
-      cloudName: cloudName,
-      apiKey: apiKey,
-      apiSecret: apiSecret,
-    );
+  //  Future<String> uploadImageToCloudinary(File imageFile) async {
+  //   final cloudName = dotenv.env['CLOUDINARY_CLOUD_NAME']!;
+  //   final apiKey = dotenv.env['CLOUDINARY_API_KEY']!;
+  //   final apiSecret = dotenv.env['CLOUDINARY_API_SECRET']!;
+  //   final cloudinary = Cloudinary.signedConfig(
+  //     cloudName: cloudName,
+  //     apiKey: apiKey,
+  //     apiSecret: apiSecret,
+  //   );
 
-    final response = await cloudinary.upload(
-      file : imageFile.path,
-      resourceType: CloudinaryResourceType.image,
-    );
+  //   final response = await cloudinary.upload(
+  //     file : imageFile.path,
+  //     resourceType: CloudinaryResourceType.image,
+  //   );
 
-    if (response.isSuccessful) {
-      return response.secureUrl!;
-    } else {
-      throw Exception('Image upload failed');
-    }
-  }
+  //   if (response.isSuccessful) {
+  //     return response.secureUrl!;
+  //   } else {
+  //     throw Exception('Image upload failed');
+  //   }
+  // }
 
-  void pickLocation () async {
-    final result = await Navigator.push(context, MaterialPageRoute(builder:(context) => MapScreen(initialLocation : _currentLocation),),);
-    if (result != null) {
-      double latitude = result['latitude'];
-      double longitude = result['longitude'];
-      setState(() {
-        _address = result['address'];
-        _currentLocation = LatLng(latitude, longitude);
-      });
-    }
-  }
+  // void pickLocation () async {
+  //   final result = await Navigator.push(context, MaterialPageRoute(builder:(context) => MapScreen(initialLocation : _currentLocation),),);
+  //   if (result != null) {
+  //     double latitude = result['latitude'];
+  //     double longitude = result['longitude'];
+  //     setState(() {
+  //       _address = result['address'];
+  //       _currentLocation = LatLng(latitude, longitude);
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -234,13 +234,26 @@ class _HomePageState extends State<HomePage> {
           // feed
           Expanded(
             child: StreamBuilder(
-              stream: FirebaseFirestore.instance.collection("User Post's").orderBy("TimeStamp", descending: false).snapshots(), 
+              stream: FirebaseFirestore.instance.collection("User Post's").orderBy("TimeStamp", descending: true).snapshots(), 
               builder:(context, snapshot) {
                 if (snapshot.hasData) {
                   return ListView.builder(itemCount: snapshot.data!.docs.length, itemBuilder:(context, index) {
                     // get the message
                     final post  = snapshot.data!.docs[index];
-                    return FeedPost(message: post["Message"], user: post['UserEmail'], time: formatDate2(post['TimeStamp']), likes: List<String>.from(post['Likes'] ?? []), postID: post.id, imageUrl: post['ImageUrl']??"", latitude: post['Latitude'], longitude: post['Longitude'], address: post['Address']);
+                    return FeedPost(
+                      title: post["Title"], 
+                      description : post['Description'],
+                      topic : List<String>.from(post['Topic'] ?? []),
+                      user: post['UserEmail'], 
+                      time: formatDate2(post['TimeStamp']), 
+                      likes: List<String>.from(post['Likes'] ?? []), 
+                      postID: post.id, 
+                      imageUrl: post['ImageUrl']??"", 
+                      latitude: post['Latitude'], 
+                      longitude: post['Longitude'], 
+                      address: post['Address'],
+                      both: "no",
+                      );
                   },);
                 }
                 else if (snapshot.hasError) {
@@ -260,9 +273,9 @@ class _HomePageState extends State<HomePage> {
               children: [
                 // text field
                 Expanded(child: MyTextField(controller: textController, hintText: "Post A Message", obscureText: false, maxLines: null,)),
-                IconButton(onPressed: pickLocation, icon: Icon(Icons.map)),
-                IconButton(onPressed: pickImage ,icon: Icon(Icons.attachment)),
-                IconButton(onPressed: postMessage, icon: Icon(Icons.send)),
+                // IconButton(onPressed: pickLocation, icon: Icon(Icons.map)),
+                // IconButton(onPressed: pickImage ,icon: Icon(Icons.attachment)),
+                // IconButton(onPressed: postMessage, icon: Icon(Icons.send)),
               ],
             ),
           ),

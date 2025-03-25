@@ -9,7 +9,9 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LeadPage extends StatefulWidget {
-  final String message;
+  final String title;
+  final String description;
+  final List<String> topic;
   final String user;
   final String time;
   final String postID;
@@ -22,7 +24,9 @@ class LeadPage extends StatefulWidget {
   final void Function()? toggleLike;
   const LeadPage({
     super.key,
-    required this.message,
+    required this.title,
+    required this.description,
+    required this.topic,
     required this.user,
     required this.time,
     required this.postID,
@@ -111,14 +115,40 @@ class _LeadPageState extends State<LeadPage> {
           padding: const EdgeInsets.all(15.0),
           child: SingleChildScrollView(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  widget.message,
+                  widget.title,
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   overflow: TextOverflow.ellipsis,
-                  maxLines: 7,
+                  maxLines: 2,
                 ),
+                const SizedBox(height: 10,),
+
+                 Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 35),
+                  child: const Divider(thickness: 2,),
+                ),
+
+                const SizedBox(height: 10,),
+
+                Text(
+                  widget.description,
+                  style: TextStyle( fontSize: 16,),
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 60,
+                ),
+                const SizedBox(height: 10,),
+
+                Text(
+                  "Tags : ${widget.topic}",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                ),
+                const SizedBox(height: 10,),
 
                 // SizedBox(
                 //     width: MediaQuery.of(context).size.width * 0.65,
@@ -127,7 +157,7 @@ class _LeadPageState extends State<LeadPage> {
                 //       padding: EdgeInsets.zero,
                 //       child: 
                 //       MarkdownBody(
-                //         data : widget.message,
+                //         data : widget.title,
                 //         softLineBreak: true,
                 //         shrinkWrap: true,
                 //         fitContent: true,
@@ -141,7 +171,7 @@ class _LeadPageState extends State<LeadPage> {
                     
                 //       // without markdown :
                 //       // Text(
-                //       //     widget.message.replaceAll(RegExp(r'(\*\*|__|\*|_)'), ''), // Remove Markdown formatting
+                //       //     widget.title.replaceAll(RegExp(r'(\*\*|__|\*|_)'), ''), // Remove Markdown formatting
                 //       //     maxLines: 3,
                 //       //     overflow: TextOverflow.ellipsis,
                 //       //     style: TextStyle(fontSize: 16),
@@ -253,6 +283,10 @@ class _LeadPageState extends State<LeadPage> {
               ), 
             ],
           ),
+
+          const SizedBox(height: 20,),
+          
+          
 
           const SizedBox(height: 20,),
 

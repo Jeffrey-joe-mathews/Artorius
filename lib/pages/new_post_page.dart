@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:artorius/helper/helper_method.dart';
+import 'package:artorius/pages/home_page.dart';
 import 'package:artorius/pages/map_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloudinary/cloudinary.dart';
@@ -26,6 +28,8 @@ class _NewPostPageState extends State<NewPostPage> {
   LatLng _currentLocation = LatLng(0.0, 0.0);
   final currentUser = FirebaseAuth.instance.currentUser!;
   XFile? _image;
+  bool _isLoading = false; 
+
 
   @override
   void initState () {
@@ -123,6 +127,10 @@ class _NewPostPageState extends State<NewPostPage> {
       descriptionController.text.isNotEmpty &&
       topicController.text.isNotEmpty) {
 
+        setState(() {
+          _isLoading = true;
+        });
+
         String? imageUrl;
 
     // Extracting topics as an array
@@ -132,19 +140,31 @@ class _NewPostPageState extends State<NewPostPage> {
         .toList();
 
     try {
-      if(_image != null) imageUrl = await uploadImageToCloudinary(File(_image!.path));
-      await FirebaseFirestore.instance.collection("User Posts").add({
+      if(_image != null) {
+        imageUrl = await uploadImageToCloudinary(File(_image!.path));
+      }
+      await FirebaseFirestore.instance.collection("User Post's").add({
         'UserEmail': FirebaseAuth.instance.currentUser!.email,
         'Title': titleController.text,
         'Description': descriptionController.text,
         'Topic': topics,
         'TimeStamp': Timestamp.now(),
+        // 'TimeStamp' : formatDate2(Timestamp.now()),
         'Likes': [],
         'ImageUrl': imageUrl ?? "",
         'Address': _address ?? "",
         'Latitude' : _currentLocation.latitude,
         'Longitude' : _currentLocation.longitude,
       });
+
+      setState(() {
+        _isLoading = false;
+      });
+
+      Navigator.pushReplacement(
+        context, 
+        MaterialPageRoute(builder: (context) => HomePage())
+      );
     } catch (e) {
       showDialog(
         context: context,
@@ -193,7 +213,10 @@ class _NewPostPageState extends State<NewPostPage> {
       appBar: AppBar(
         title: const Text("Create a Post"),
       ),
-      body: ListView(
+      body: 
+      _isLoading ? 
+      Center(child: CircularProgressIndicator(),) :
+      ListView(
         children: [
           Padding(
         padding: const EdgeInsets.all(16.0),
