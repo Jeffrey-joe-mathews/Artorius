@@ -34,7 +34,7 @@ class _NewPostPageState extends State<NewPostPage> {
   @override
   void initState () {
     super.initState();
-    _getCurrentLocation();
+    // _getCurrentLocation();
   }
 
   Future<void> _getCurrentLocation () async {
@@ -277,7 +277,10 @@ class _NewPostPageState extends State<NewPostPage> {
                         size: 32,
                         color: _address != "" ? Colors.green : Colors.grey,
                       ),
-                      onPressed:() => pickLocation() ,
+                      onPressed:() { 
+                        _getCurrentLocation();
+                        pickLocation(); 
+                        },
                     ),
                   ],
                 ),

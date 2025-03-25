@@ -112,202 +112,245 @@ class _LeadPageState extends State<LeadPage> {
       ),
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(15.0),
+          padding: const EdgeInsets.all(12.0),
           child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  widget.title,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
-                ),
-                const SizedBox(height: 10,),
-
-                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 35),
-                  child: const Divider(thickness: 2,),
-                ),
-
-                const SizedBox(height: 10,),
-
-                Text(
-                  widget.description,
-                  style: TextStyle( fontSize: 16,),
-                  textAlign: TextAlign.center,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 60,
-                ),
-                const SizedBox(height: 10,),
-
-                Text(
-                  "Tags : ${widget.topic}",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
-                ),
-                const SizedBox(height: 10,),
-
-                // SizedBox(
-                //     width: MediaQuery.of(context).size.width * 0.65,
-                //     child: SingleChildScrollView(
-                //       physics: NeverScrollableScrollPhysics(),
-                //       padding: EdgeInsets.zero,
-                //       child: 
-                //       MarkdownBody(
-                //         data : widget.title,
-                //         softLineBreak: true,
-                //         shrinkWrap: true,
-                //         fitContent: true,
-                //         styleSheet: MarkdownStyleSheet(
-                //           h1: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                //           h2: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                //           p: TextStyle(fontSize: 16),
-                //         ),
-                        
-                //         ),
-                    
-                //       // without markdown :
-                //       // Text(
-                //       //     widget.title.replaceAll(RegExp(r'(\*\*|__|\*|_)'), ''), // Remove Markdown formatting
-                //       //     maxLines: 3,
-                //       //     overflow: TextOverflow.ellipsis,
-                //       //     style: TextStyle(fontSize: 16),
-                //       //   ),
-                    
-                    
-                //     ),
-                //   ),
-
-                const SizedBox(height: 10,),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 35),
-                  child: const Divider(thickness: 2,),
-                ),
-
-                const SizedBox(height: 10,),
-
-                Text(
-                  'Posted By : ${widget.user}',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 3,
-                  ),
-
-                const SizedBox(height: 10,),
-
-                Text(
-                  "Date : ${widget.time}",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 3,
-                ),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              // color: Colors.green,
+              margin: EdgeInsets.all(8),
+              padding: EdgeInsets.all(12),
+              
+              // decoration: BoxDecoration(
+              //   borderRadius: BorderRadius.circular(12),
+              // ),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      widget.title,
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                    ),
+                    const SizedBox(height: 10,),
                 
-                const SizedBox(height: 7,),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 35),
-                  child: const Divider(thickness: 2,),
-                ),
-
-                const SizedBox(height: 7,),
-
-                (widget.imageUrl != null) 
-                ?
-                Image.network(widget.imageUrl!)
-                :
-                Text("No Image Provided"),
-
-                // display event details
-                const SizedBox(height: 10,),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 35),
-                  child: const Divider(thickness: 2,),
-                ),
-
-                const SizedBox(height: 10,),
-
-                // display address
-                if (widget.address != null)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.location_on_outlined, size: 64,),
+                     Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 35),
+                      child: const Divider(thickness: 2,),
+                    ),
+                
+                    const SizedBox(height: 10,),
+                
+                    Text(
+                      widget.description,
+                      style: TextStyle( fontSize: 14, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 120,
+                    ),
+                    const SizedBox(height: 10,),
+                
+                    Text(
+                      "Tags : ${widget.topic}",
+                      style: TextStyle( fontSize: 14),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 5,
+                    ),
+                    const SizedBox(height: 10,),
+                
+                    // SizedBox(
+                    //     width: MediaQuery.of(context).size.width * 0.65,
+                    //     child: SingleChildScrollView(
+                    //       physics: NeverScrollableScrollPhysics(),
+                    //       padding: EdgeInsets.zero,
+                    //       child: 
+                    //       MarkdownBody(
+                    //         data : widget.title,
+                    //         softLineBreak: true,
+                    //         shrinkWrap: true,
+                    //         fitContent: true,
+                    //         styleSheet: MarkdownStyleSheet(
+                    //           h1: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    //           h2: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    //           p: TextStyle(fontSize: 16),
+                    //         ),
+                            
+                    //         ),
+                        
+                    //       // without markdown :
+                    //       // Text(
+                    //       //     widget.title.replaceAll(RegExp(r'(\*\*|__|\*|_)'), ''), // Remove Markdown formatting
+                    //       //     maxLines: 3,
+                    //       //     overflow: TextOverflow.ellipsis,
+                    //       //     style: TextStyle(fontSize: 16),
+                    //       //   ),
+                        
+                        
+                    //     ),
+                    //   ),
+                
+                    const SizedBox(height: 10,),
+                
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 35),
+                      child: const Divider(thickness: 2,),
+                    ),
+                
+                    const SizedBox(height: 10,),
+                
+                    // Text(
+                    //   'Posted By : ${widget.user}',
+                    //   style: TextStyle(fontWeight: FontWeight.bold),
+                    //   overflow: TextOverflow.ellipsis,
+                    //   maxLines: 3,
+                    //   ),
+                
+                    // const SizedBox(height: 10,),
+                
+                    // Text(
+                    //   "Date : ${widget.time}",
+                    //   style: TextStyle(fontWeight: FontWeight.bold),
+                    //   overflow: TextOverflow.ellipsis,
+                    //   maxLines: 3,
+                    // ),
+                    
+                    // const SizedBox(height: 7,),
+                
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 35),
+                    //   child: const Divider(thickness: 2,),
+                    // ),
+                
+                    const SizedBox(height: 7,),
+                
+                    (widget.imageUrl != null) 
+                    ?
+                    Image.network(widget.imageUrl!)
+                    :
+                    Text("No Image Provided"),
+                
+                    // display event details
+                    const SizedBox(height: 10,),
+                
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 35),
+                      child: const Divider(thickness: 2,),
+                    ),
+                
+                    const SizedBox(height: 10,),
+                
+                    // display address
+                    if (widget.address != null)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.location_on_outlined, size: 64,),
+                          const SizedBox(height: 10,),
+                          GestureDetector(
+                            onTap: openGoogleMaps,
+                            child: Expanded(
+                              child: Text(
+                                widget.address!,
+                                style: TextStyle(color: Colors.blue),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 7,
+                                )
+                            ),
+                          )
+                        ],
+                      ),
+                
                       const SizedBox(height: 10,),
-                      GestureDetector(
-                        onTap: openGoogleMaps,
-                        child: Expanded(
-                          child: Text(
-                            widget.address!,
-                            style: TextStyle(color: Colors.blue),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 7,
-                            )
-                        ),
-                      )
+                
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 35),
+                      child: const Divider(thickness: 2,),
+                    ),
+                
+                    const SizedBox(height: 10,),
+                
+                      Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [ 
+                  // Like Button and Count
+                  Column(
+                    children: [
+                      LikeButton(isLiked: widget.isLiked, onTap: widget.toggleLike),
+                      const SizedBox(height: 5),
+                      Text(widget.likes.length.toString(), style: TextStyle(color: Colors.grey)),
                     ],
-                  ),
+                  ), 
+                
+                  // Comment Button and Count
+                  Column(
+                    children: [
+                      CommentButton(onTap: showCommentDialog),
+                      const SizedBox(height: 5),
+                      Text("0", style: TextStyle(color: Colors.grey)),
+                    ],
+                  ), 
+                ],
+                          ),
+                
+                          const SizedBox(height: 20,),
+                          
+          
+                
+                          StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance.collection("User Post's").doc(widget.postID).collection("Comments").orderBy("CommentTime", descending: true).snapshots(), 
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  return ListView(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: snapshot.data!.docs.map((doc) {
+                      final commentData = doc.data() as Map<String, dynamic>;
+                      return Comments(comment: commentData['CommentText'], time: formatDate(commentData['CommentTime']), user: commentData['CommentedBy']);
+                    }).toList(),
+                  );
+                },
+                          ),
 
-                  const SizedBox(height: 10,),
+                    const SizedBox(height: 10,),
 
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 35),
-                  child: const Divider(thickness: 2,),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 35),
+                      child: const Divider(thickness: 2,),
+                    ),
+
+                    const SizedBox(height: 10,),
+
+                          Text(
+                      'Posted By : ${widget.user}',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 3,
+                      ),
+                
+                    const SizedBox(height: 10,),
+                
+                    Text(
+                      "Date : ${widget.time}",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 3,
+                    ),
+                    
+                    const SizedBox(height: 7,),
+                
+                          
+                  ],
                 ),
-
-                const SizedBox(height: 10,),
-
-                  Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [ 
-              // Like Button and Count
-              Column(
-                children: [
-                  LikeButton(isLiked: widget.isLiked, onTap: widget.toggleLike),
-                  const SizedBox(height: 5),
-                  Text(widget.likes.length.toString(), style: TextStyle(color: Colors.grey)),
-                ],
-              ), 
-
-              // Comment Button and Count
-              Column(
-                children: [
-                  CommentButton(onTap: showCommentDialog),
-                  const SizedBox(height: 5),
-                  Text("0", style: TextStyle(color: Colors.grey)),
-                ],
-              ), 
-            ],
-          ),
-
-          const SizedBox(height: 20,),
-          
-          
-
-          const SizedBox(height: 20,),
-
-          StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance.collection("User Post's").doc(widget.postID).collection("Comments").orderBy("CommentTime", descending: true).snapshots(), 
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              return ListView(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                children: snapshot.data!.docs.map((doc) {
-                  final commentData = doc.data() as Map<String, dynamic>;
-                  return Comments(comment: commentData['CommentText'], time: formatDate(commentData['CommentTime']), user: commentData['CommentedBy']);
-                }).toList(),
-              );
-            },
-          ),
-          
-              ],
+              ),
             ),
           ),
         ),
