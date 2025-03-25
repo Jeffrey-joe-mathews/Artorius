@@ -163,7 +163,6 @@ class _LeadPageState extends State<LeadPage> {
                       overflow: TextOverflow.ellipsis,
                       maxLines: 5,
                     ),
-                    const SizedBox(height: 10,),
                 
                     // SizedBox(
                     //     width: MediaQuery.of(context).size.width * 0.65,
@@ -198,10 +197,10 @@ class _LeadPageState extends State<LeadPage> {
                 
                     const SizedBox(height: 10,),
                 
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 35),
-                      child: const Divider(thickness: 2,),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 35),
+                    //   child: const Divider(thickness: 2,),
+                    // ),
                 
                     const SizedBox(height: 10,),
                 
@@ -239,10 +238,10 @@ class _LeadPageState extends State<LeadPage> {
                     // display event details
                     const SizedBox(height: 10,),
                 
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 35),
-                      child: const Divider(thickness: 2,),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 35),
+                    //   child: const Divider(thickness: 2,),
+                    // ),
                 
                     const SizedBox(height: 10,),
                 
@@ -269,10 +268,10 @@ class _LeadPageState extends State<LeadPage> {
                 
                       const SizedBox(height: 10,),
                 
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 35),
-                      child: const Divider(thickness: 2,),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 35),
+                    //   child: const Divider(thickness: 2,),
+                    // ),
                 
                     const SizedBox(height: 10,),
                 
@@ -296,8 +295,16 @@ class _LeadPageState extends State<LeadPage> {
                       Text("0", style: TextStyle(color: Colors.grey)),
                     ],
                   ), 
+                  Padding(
+                padding: const EdgeInsets.all(7),
+                child: TextButton(onPressed: (){}, 
+                  child: Text("Enroll?", style: TextStyle(color: Colors.green, fontSize: 19),),
+                 ),
+              ),
                 ],
                           ),
+
+                   
                 
                           const SizedBox(height: 20,),
                           
@@ -322,10 +329,10 @@ class _LeadPageState extends State<LeadPage> {
 
                     const SizedBox(height: 10,),
 
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 35),
-                      child: const Divider(thickness: 2,),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 35),
+                    //   child: const Divider(thickness: 2,),
+                    // ),
 
                     const SizedBox(height: 10,),
 

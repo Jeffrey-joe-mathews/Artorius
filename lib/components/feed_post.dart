@@ -256,22 +256,22 @@ class _FeedPostState extends State<FeedPost> {
               child: Image.network(widget.imageUrl!),
             ),
 
-          if(widget.address != null) 
-            GestureDetector(
-              onTap: openGoogleMaps,
-              child: Row(
-                children: [
-                  Icon(Icons.pin_drop),
-                  Text(
-                    // "Address : ${"${widget.address!.substring(0, 17)}..."??"Address not Provided"}",
-                    "Address : ${widget.address!.length > 15 ? widget.address!.substring(0, 15) : widget.address ?? "Address not Provided"}",
-                    style: TextStyle(color: Colors.blue),
-                  ),
+          // if(widget.address != null) 
+          //   GestureDetector(
+          //     onTap: openGoogleMaps,
+          //     child: Row(
+          //       children: [
+          //         Icon(Icons.pin_drop),
+          //         Text(
+          //           // "Address : ${"${widget.address!.substring(0, 17)}..."??"Address not Provided"}",
+          //           "Address : ${widget.address!.length > 15 ? widget.address!.substring(0, 15) : widget.address ?? "Address not Provided"}",
+          //           style: TextStyle(color: Colors.blue),
+          //         ),
                   
-                  ],
+          //         ],
                 
-              ),
-            ),
+          //     ),
+          //   ),
           
           const SizedBox(height: 5,),
 
@@ -295,6 +295,7 @@ class _FeedPostState extends State<FeedPost> {
                   Text("0", style: TextStyle(color: Colors.grey)),
                 ],
               ), 
+              
 
             ],
           ),
