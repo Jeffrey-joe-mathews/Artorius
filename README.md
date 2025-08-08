@@ -65,6 +65,10 @@ Artorius is a solo project developed by me. Contributions are welcome once core 
 
 ## 📸 Screenshots
 
+![Login Page](assets/screenshots/WhatsApp%20Image%202025-08-08%20at%2022.11.47.jpeg)
+![Home Screen](assets/screenshots/WhatsApp%20Image%202025-08-08%20at%2022.11.49(1).jpeg)
+![Add Event Page](assets/screenshots/WhatsApp%20Image%202025-08-08%20at%2022.11.56.jpeg)
+
 
 ---
 
